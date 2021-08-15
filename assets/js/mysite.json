@@ -30,7 +30,7 @@ var technologySite = [
     "siteDes": "只有高手分享的中文技术社区"
 },
 {
-    "siteToUrl": "https://stackoverflow.com/users/10538717/gorpeln",
+    "siteToUrl": "https://stackoverflow.com/users/14384711/gorpeln",
     "siteImg": "https://img.gorpeln.cn/gorpeln/blog/seoimg/gorpeln_myblog_stackoverflow.ico",
     "siteTitle": "Stack Overflow",
     "siteDes": "国外编程相关的IT技术问答网站"
@@ -67,12 +67,6 @@ var codingGitSite = [
     "siteImg": "https://img.gorpeln.cn/gorpeln/blog/seoimg/gorpeln_myblog_github.ico",
     "siteTitle": "GitHub",
     "siteDes": "面向开源及私有软件项目的git托管平台"
-},
-{
-    "siteToUrl": "https://coding.net/u/gorpeln",
-    "siteImg": "https://img.gorpeln.cn/gorpeln/blog/seoimg/gorpeln_myblog_coding.png",
-    "siteTitle": "Coding",
-    "siteDes": "中国最大的git平台"
 },
 {
     "siteToUrl": "https://gitee.com/gorpeln",

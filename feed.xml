@@ -6,6 +6,263 @@
     <description>一个涉猎广泛（iOS、UI、PHP、VUE、APIClound、HTML、小程序、运维、产品、服务器、数据库）且致力于成为一名架构师的、狂热的iOS程序猿，充满新奇的想法并正在付诸于实际，幻想着有一天能升职加薪，当上总经理，出任CEO，迎娶白富美，走上人生巅峰！</description>
     
       <item>
+        <title>个性化UI在金融场景的探索和应用</title>
+        <link>https://gorpeln.cn/article/16005868715</link>
+        <guid isPermaLink="true">https://gorpeln.cn/article/16005868715</guid>
+        <pubDate>Sun, 20 Sep 2020 00:00:00 +0800</pubDate>
+        <description>&lt;h3 id=&quot;一背景&quot;&gt;一、背景&lt;/h3&gt;
+&lt;p&gt;随着各业务流量红利逐渐见顶，如何在有限的流量下，提升流量给用户带来的体验，对流量进行精细化运营，进而提升转化效率，成为各业务的重要课题。&lt;/p&gt;
+
+&lt;p&gt;蚂蚁数字金融线包含了 保险/理财/信用/借贷 等业务，经过多年建设，形成了多样的金融资产/场景服务/权益/内容等多维度的产品去服务用户，而这些产品分发给用户时，决定曝转率的大体上以产品推荐是否精准，以及产品以什么样的UI表述方式进行展示决定。在产品推荐上，算法已经逐步覆盖，给业务带来很大的效果提升，在产品推荐算法优化到一定程度后，提升的投入产出比已经有限，我们开始在UI展示上探索，是否个性化智能化的展示能为业务带来提升。&lt;/p&gt;
+
+&lt;h3 id=&quot;二探索&quot;&gt;二、探索&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;https://img.gorpeln.cn/blog_ui_dev_001.jpg&quot; alt=&quot;blog_ui_dev_001&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;淘宝比较早地做了智能UI的尝试，在推荐出商品后，对于商品的UI展现方式进行千人千面个性化，商品列表有两列/三列/横排的布局方式，商品封面有 场景图/白底图/视频 等类型，商品本身有 标题/描述/评价/销量/属性/标签/活动/价格/快递/地区 等一系列字段标签，在列表上无法全部容纳，不同的人对不同的 布局密度/封面/字段标签 会有不一样的关注度，这里就有了智能化的空间，对这些属性进行自由组合千人千面推荐，取得不错的提升成果。&lt;/p&gt;
+
+&lt;p&gt;在数字金融线的业务，是否也可以这样做？数字金融线各业务的“货”并不是统一标准化的商品，主要由 金融资产/服务/权益/内容 构成。例如财富业务，金融资产(基金/定期等)在购买门槛高的情况下，会通过各种包装降低门槛，包括场景化包装成服务(工资理财/笔笔攒等），配合营销活动包装权益(体验金/财运金/黄金票等)，包装资讯/视频/直播等形式的内容。同时这些包装后的“货”在不同场景有不同的UI展现形式，并不是标准化的，这些“货”也没有多种字段可以直接进行自由组合搭配，如何能做个性化千人千面？&lt;/p&gt;
+
+&lt;h3 id=&quot;三问题&quot;&gt;三、问题&lt;/h3&gt;
+
+&lt;p&gt;我们可以针对一个个场景设计多个模板样式去匹配不同的人，这也是之前在一些业务上进行过一些尝试的，但有几个问题：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;无设计标准&lt;/code&gt;：设计什么不同的UI样式才可能有效，没有标准和指导，靠设计师个人经验。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;样式生产效能&lt;/code&gt;：UI样式需要一定量级进行分人群匹配，设计工作量大。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;算法匹配信息不足&lt;/code&gt;：算法难以识别不同UI样式间的差别，以 人&amp;lt;-&amp;gt;样式ID 的方式匹配效果有限。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;无沉淀不通用&lt;/code&gt;：不同的场景割裂，设计经验/算法经验/工程链路无法复用，无法沉淀用户偏好，各场景实现成本大。&lt;br /&gt;
+针对这些问题，我们探索了一套相对通用的个性化UI解决方案。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;四方案&quot;&gt;四、方案&lt;/h3&gt;
+&lt;h4 id=&quot;1语义标签体系&quot;&gt;1）语义标签体系&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;https://img.gorpeln.cn/blog_ui_dev_002.jpg&quot; alt=&quot;blog_ui_dev_002&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;首先是根据过往数金各场景的设计经验，由设计团队主导抽象出一套UI语义标签体系，去描述一个UI样式里可能吸引用户点击的关键点。&lt;/p&gt;
+
+&lt;p&gt;这个标签体系分表现层和内容层两个层面：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;表现层&lt;/code&gt;去描述UI长什么样，比如它的风格是实物还是扁平的，色彩是鲜艳的还是偏透明的，字体相对大小。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;内容层&lt;/code&gt;表示这个UI展现有什么内在含义，比如它是突出权益的(红包/抽奖等)，代表从众心理的(xx人正在购买)，代表认知的(黄金图/人物图/降维描述/品牌权威描述)等等。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;我们认为不同人对这里列出来的标签是会有不同偏好的，例如年轻持仓少的，可能用扁平图/从众/降维描述相对能打中，老年人可能对权益/实物图形/大按钮比较敏感。&lt;/p&gt;
+
+&lt;p&gt;这套标签期望能产生几个作用：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;指导设计往什么方向进行差异化设计。&lt;/li&gt;
+  &lt;li&gt;语义化描述UI，作为特征让算法更好地认识UI的外在和内在含义，多场景通用。&lt;/li&gt;
+  &lt;li&gt;后期可以针对线上数据进行归因分析，语义化看出不同用户的UI偏好差异。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;2工程算法&quot;&gt;2）工程算法&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;https://img.gorpeln.cn/blog_ui_dev_003.jpg&quot; alt=&quot;blog_ui_dev_003&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;标签体系的思路把UI的维度拆细了，为不同人原子化设计不同的元素，我们沿着这个思路打造了相应的工程和算法方案：&lt;/p&gt;
+
+&lt;h5 id=&quot;1多样式生成&quot;&gt;1.多样式生成&lt;/h5&gt;
+&lt;p&gt;我们将UI原子化打散-自由组合。一个产品可以以各种方式包装后呈现给用户，主要包括描述产品的创意物料（文案/图片/动画），再配合不同的样式和版式（字号/背景/布局排版）组成，这些元素可以进行自由组合，例如一个单图文模块，我们可以参考标签体系设计10个文案，10个图片，2个排版样式，排列组合就可以生成200个UI样式包，作为丰富的可以匹配不同用户的素材。&lt;/p&gt;
+
+&lt;h5 id=&quot;2ui偏好模型&quot;&gt;2.UI偏好模型&lt;/h5&gt;
+&lt;p&gt;我们将组合生成的UI样式包结合UI标签与用户属性进行匹配关联，以CTR为目标训练模型。训练中取三种数据：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用户属性，包括年龄性别等基础属性，以及像持仓情况、投资次数这样的业务属性&lt;/li&gt;
+  &lt;li&gt;每个UI样式包所打的UI标签数据&lt;/li&gt;
+  &lt;li&gt;每个UI样式包在线上随机投放的曝光点击数据&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;经过特征工程处理，组成训练集去训练出DNN模型，在线上部署使用，输入是 用户属性 + (UI样式包对应的)UI标签 列表，输出是每个UI包的点击概率排序。&lt;/p&gt;
+
+&lt;h5 id=&quot;3工程链路打通&quot;&gt;3.工程链路打通&lt;/h5&gt;
+&lt;p&gt;从样式配置，到数据组装，到召回排序，到最后前端渲染，对接各个平台串联整个链路，在各场景实现千人千面UI推荐能力。&lt;/p&gt;
+
+&lt;h3 id=&quot;五落地效果&quot;&gt;五、落地效果&lt;/h3&gt;
+&lt;p&gt;当前个性化UI在数金多个场景落地，不同场景有不同的提升效果，按流量平均下来CTR（曝光点击率)提升20%左右，同时接入的场景CVR(曝光转化率)也同步提升。&lt;/p&gt;
+
+&lt;p&gt;其中流量最大的是支付宝首页财富生活模块，组合了几百种样式进行匹配推荐，CTR的提升在首页大流量的加持下为业务带来很大价值。&lt;/p&gt;
+
+&lt;p&gt;CTR提升最大的是理财Tab蓄水版直通车里的黄金和黄金票卡片，一千多 种样式，CTR 和CVR可以提升50%左右。在这个版本里卡片在屏幕占比较大，不同元素的展示对用户点击的影响是非常大的，这也是最适合接入个性化UI的场景。
+&lt;img src=&quot;https://img.gorpeln.cn/blog_ui_dev_004.jpg&quot; alt=&quot;blog_ui_dev_004&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;六分析&quot;&gt;六、分析&lt;/h3&gt;
+&lt;h4 id=&quot;1有效性分析&quot;&gt;1）有效性分析&lt;/h4&gt;
+&lt;p&gt;为什么这套方案会有效提升CTR，尝试回答几个常见问题：&lt;/p&gt;
+
+&lt;h5 id=&quot;1疲劳度&quot;&gt;1.疲劳度&lt;/h5&gt;
+&lt;p&gt;&lt;strong&gt;是不是用户对一成不变的样式有疲劳度，只要有新的样式点击率就会提高？&lt;/strong&gt;我们在每个场景里上线个性化UI，会分几个桶进行AB效果对比，其中随机桶是对组合生成的几百个样式进行随机投放，比如这是财富生活的实验数据：
+&lt;img src=&quot;https://img.gorpeln.cn/blog_ui_dev_005.jpg&quot; alt=&quot;blog_ui_dev_005&quot; /&gt;
+可以看到随机投放组合出来的样式效果并不好，并没有因为样式多了就能提升，反而因为组合出来的某些质量相对差的样式影响CTR下降，这在多个场景里都有类似的的情况，可以看到CTR的提升并不是疲劳度新鲜UI带来的。&lt;/p&gt;
+
+&lt;h5 id=&quot;2ui外的因素&quot;&gt;2.UI外的因素&lt;/h5&gt;
+&lt;p&gt;&lt;strong&gt;是否是UI以外的因素影响CTR，例如不同的产品/权益内容？&lt;/strong&gt;每个展位接入的AB实验里，产品和权益是固定不变的，个性化UI用不同的表述方式（图片/文案/样式/排版）展示同样的产品和权益在同一时间随机人群进行AB对比，没有其他因素干扰。&lt;/p&gt;
+
+&lt;h5 id=&quot;3新样式抢眼&quot;&gt;3.新样式抢眼&lt;/h5&gt;
+&lt;p&gt;&lt;strong&gt;是否有几个很吸引眼球的UI拉高了CTR，没什么人群偏好差别？&lt;/strong&gt;很有可能因为原来的样式不抢眼，我们组合出来的某些样式加红加粗天然吸引用户注意力，实际上我们实践中因为设计规范的约束不会做太抢注意力的设计，同时我们也分析了，不同样式在随机投放和算法投放的差别，例如下图玩转理财场景里，一些样式算法推荐的人群比这个样式随机投放它的点击率提升了几十个百分点，说明不同人对这些样式有明显偏好，算法把这些样式分配给真正偏好的人，带来了点击率提升的收益。
+&lt;img src=&quot;https://img.gorpeln.cn/blog_ui_dev_006.jpg&quot; alt=&quot;blog_ui_dev_006&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;2归因分析&quot;&gt;2）归因分析&lt;/h4&gt;
+&lt;p&gt;我们看到了用户对不同UI表述展示方式有不同偏好，期望能沉淀出具体人群跟UI的偏好关系，给设计师和业务方在新场景设计中提供参考帮助。得益于UI语义标签体系，我们是可以沉淀出UI偏好和画像的。&lt;/p&gt;
+
+&lt;p&gt;我们探索尝试了多种方法去做归因分析，包括：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;数据统计&lt;/strong&gt;，直接统计线上不同人群在不同样式的点击率，在图表上找出点击率的差异，沉淀偏好结论。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;EBM可解释性模型&lt;/strong&gt;，解释DNN模型中各特征对最终效果的贡献度，以及交叉特征观察人群特征和UI标签的关联关系。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;网格分析&lt;/strong&gt;，在表格上将多个人群特征-UI标签进行组合，列出所有组合的点击率，从中找出点击率变化规律和差异，找出偏好差异。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;标准化偏好&lt;/strong&gt;，CTR(UI特征,人群特征,对应产品)/CTR(人群特征,对应产品)，衡量单个UI元素在指定人群特征里对点击率的影响程度，再进行对比找出偏好差异。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;单样本方法&lt;/strong&gt;，建模的方式分析人群特征和UI特征的贡献度。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;初步可以沉淀出一些偏好洞察，例如：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;理财货架场景上，收入较低者偏好产品名称，普通/高收入者偏好产品推荐语。&lt;/li&gt;
+  &lt;li&gt;按钮颜色上，总体红色比蓝色更吸引，但越年轻的用户，越偏好支付宝蓝。&lt;/li&gt;
+  &lt;li&gt;白领/初级投资者偏好金融元素，蓝领/高级投资者偏好品牌元素。&lt;/li&gt;
+  &lt;li&gt;有信用卡者对走势图不敏感，无信用卡者更偏好走势图。&lt;/li&gt;
+  &lt;li&gt;中年(40-50岁)年龄段特别偏好紧迫心理类型的标题，尤其偏好行业风口类。&lt;/li&gt;
+  &lt;li&gt;理财货架中，整体上宫格样式效果远低于列表样式(宫格面积相对小)，但年长者对宫格偏好不低。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;归因洞察还未形成稳定分析体系，处于探索期，最终是期望探索到一种或多种分析有效通用的方法，沉淀为平台自动分析能力，能在平台沉淀 业务维度、场景维度、人群维度 的UI偏好画像。&lt;/p&gt;
+
+&lt;h3 id=&quot;七产品化&quot;&gt;七、产品化&lt;/h3&gt;
+&lt;p&gt;在方案落地出效果后，我们看到这套能力是具备一定通用性，各业务可以接入获益的，于是我们致力于将它的能力产品化，沉淀多样式生成配置、通用高效的UI偏好模型等能力，让各场景可以快速接入。主要围绕接入效率和接入效果进行优化。&lt;/p&gt;
+
+&lt;h4 id=&quot;1效率优化&quot;&gt;1）效率优化&lt;/h4&gt;
+&lt;p&gt;个性化UI的接入成本比较高，需要设计素材，人工打标，前端/业务后台/中台对接工程链路，训练UI偏好模型，跟进实验，手工清洗数据分析。涉及流程长，对接的角色多，投入较大。在平台级大流量展位上接入这套能力，能产出很大的业务效果，这样的投入还能接受，但要覆盖更多的长尾场景，这样的接入效率性价比相对低，难以被接受，我们从几个方面建设去提升各场景的接入效率：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;一站式配置平台&lt;/strong&gt;(万花筒平台)，完善样式配置、组合预览、打标、筛选审核、业务干预、样式三板斧发布、数据分析能力。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;通用链路&lt;/strong&gt;，提供从样式包召回、推荐、数据组装的通用工程链路，通过 BFF SDK 输出，普通场景只需要前端BFF接入SDK即可完成接入，减少与业务后台和中台的链路对接。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;通用模型&lt;/strong&gt;，用户特征和UI标签特征在各个场景里是通用的，也就可以训练出一个通用模型，映射用户特征和UI标签特征的偏好关系进行推荐，虽然效果相对专门训练的模型会打折扣，但适合长尾场景快速接入。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;专用链路&lt;/strong&gt;，数金多数场景与各业务平台和中台结合较紧密，我们把个性化UI能力嵌入这些平台，可以提供更好的结合业务和特定场景的一站式使用体验，提升效率，例如对接UCDP/梵高/毕加索建设banner链路、对接洛可建设微贷专有链路等。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;以上几点是短期内会建设完成的能力，此外有两个正在探索中的提升接入效率的课题：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;素材生成&lt;/strong&gt;，当前接入的大多数场景需要设计师和运营一起产出多个图片和文案素材，这是接入流程中最大的成本，我们在探索素材自动生成的方案，沉淀符合设计规范的原子图片素材库，提供对不同场景尺寸和组合的处理适配能力，让图片素材可以在多个场景里复用。文案方面在中台智能文案基础上加入更多的业务语料，自动生产的文案更符合业务调性和用户偏好。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;自动化打标&lt;/strong&gt;，当前需要手工对每个元素进行打标，当标签趋于稳定，并且打标量达到一定程度后，可以通过算法理解图片和文本，归类到指定的标签进行自动化打标，减少人工投入。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;2效果优化&quot;&gt;2）效果优化&lt;/h4&gt;
+&lt;p&gt;如何对样式推荐的效果进行进一步提升，也是我们持续在探索的，算法效果的提升，很大一部分取决于特征数据的丰富和准确，围绕数据会在这几方面进行尝试：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;端智能结合&lt;/strong&gt;，云端不直接推荐UI样式结果，而是推荐几个样式候选集，端上再进行实时重排。为什么端上重排可能会有效，端上可以根据用户的实时行为，判断用户看了还是没看(停留了、快速划过)，再结合它的行为路径(点了有某个UI标签的展位、快速离开、去了很多二级页等)，去综合判断是否因为疲劳度、兴趣变化等去切换其他样式，更好打中用户。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;自动特征工程&lt;/strong&gt;，训练专用的UI推荐模型时，会根据对场景的理解进行特征筛选和交叉组合处理，这里选择什么特征交叉由个人经验决定，我们借助AI中台的能力，尝试autoCross自动筛选有效的交叉特征，理论上能得到比手工交叉筛选更好的效果，同时减少特征工程的人员投入。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;多模态建模&lt;/strong&gt;，抽取图片素材/文本素材的高维特征，融合后作为UI标签的补充加入训练，丰富模型对UI的理解。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;UI标签演进&lt;/strong&gt;，我们一开始构建的表现层/内容层的标签体系，几个场景使用下来有不错的效果，但还没能做到很通用地描述UI，正在尝试以描述因子/驱动因子的方式组织标签，我们会尝试不断迭代标签的描述粒度和通用性。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;八未来&quot;&gt;八、未来&lt;/h3&gt;
+&lt;p&gt;个性化UI在金融场景我们实现了从0到1的突破，后续从1到100我们还需要做很多工作，除了上面说的产品化效率和效果优化，还有三个方向持续探索：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;通用性&lt;/strong&gt;，当前的标签体系、模型、工程链路都是围绕数金业务进行建设，实际上这套能力在多产品服务分发的场景都能适用，比较适合支付宝的业务形态，后续可提升通用性，在支付宝分发海量产品服务的展位上进行尝试。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;UI偏好画像&lt;/strong&gt;，接入的场景足够多，标签体系足够完善，归因的方法探索出通用有效的方案后，可以沉淀用户的UI偏好画像，作为体验端的数据资产，为后续算法模型、业务设计提供价值。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;能力扩展&lt;/strong&gt;，我们围绕单展位模块的千人千面建设个性化UI能力，在这以外，跟智能展示相关的，还会有其他空间可以挖掘，例如全屏的注意力管理，用智能化的手段，避免全屏范围内 动画/红点/抢眼颜色/弹屏 不断抢占用户吸引力，以合适的方式分配用户注意力，提供更好的体验和效果，是一个可以探索的方向。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;九总结&quot;&gt;九、总结&lt;/h3&gt;
+&lt;p&gt;我们针对数金的业务特性，在对产品的个性化UI展示上提出了 元素打散组合-语义打标-算法推荐-归因分析 的方案，落地取得了不错的效果，当前在将能力进行产品化沉淀的过程中，逐渐完善核心的 多样式生产、精准UI偏好模型、UI偏好画像 能力，让各长尾场景快速接入取得规模化的业务结果。过程中会碰到许多困难，但核心的“不同人有不同UI偏好”已被验证，我们会沿着这个方向，联合设计、产品运营、算法、质量一起持续深耕和拓展个性化UI能力。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>本机号码一键登录</title>
+        <link>https://gorpeln.cn/article/15987505965</link>
+        <guid isPermaLink="true">https://gorpeln.cn/article/15987505965</guid>
+        <pubDate>Sun, 30 Aug 2020 00:00:00 +0800</pubDate>
+        <description>&lt;h3 id=&quot;一前言&quot;&gt;一、前言&lt;/h3&gt;
+&lt;p&gt;在移动app使用手机号码登录的场景中，传统模式的步骤如下：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;输入手机号码&lt;/li&gt;
+  &lt;li&gt;接收验证码&lt;/li&gt;
+  &lt;li&gt;输入接收到的验证码&lt;/li&gt;
+  &lt;li&gt;点击登陆&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;最近看到很多应用都采用了一种新的模式—&lt;code class=&quot;highlighter-rouge&quot;&gt;本机号码一键登录&lt;/code&gt; ，这种模式对于用户来说，只需要确认下手机号码是否正确，点击确认登陆即可，即需要操作传统模式的最后一步，方便快捷，抖音、淘宝等应用均已经接入。&lt;br /&gt;
+&lt;img src=&quot;https://img.gorpeln.cn/blog_login_001.jpg&quot; alt=&quot;blog_login_001&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;那么&lt;code class=&quot;highlighter-rouge&quot;&gt;本机号码一键登录&lt;/code&gt;的原理是什么呢？下面我们来聊一聊。&lt;/p&gt;
+
+&lt;h3 id=&quot;二实现原理&quot;&gt;二、实现原理&lt;/h3&gt;
+
+&lt;p&gt;目前三大运营商均有介绍和接入文档，原理和流程基本相同，本文从中国移动提供的sdk接入文档来阐述下原理。&lt;/p&gt;
+
+&lt;p&gt;登录时序图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://img.gorpeln.cn/blog_login_mobile_002.jpg&quot; alt=&quot;blog_login_mobile_002&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从上图中可以分解出客户端和服务端的职责，客户端需要取号和授权，服务端需要获取手机号。&lt;/p&gt;
+
+&lt;h4 id=&quot;1客户端&quot;&gt;1、客户端&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;取号&lt;br /&gt;
+在进行一键登录的时候，需要判断用户是否可以获取到本机号码，只有成功获取到号码后才会进行下一步授权。一键登录服务必须打开蜂窝数据流量并且手机操作系统给予应用蜂窝数据权限才能使用，成功获取的过程是需要消耗一点流量。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;授权&lt;br /&gt;
+非完整号码成功获取后，就可以请求展示授权页，供用户操作。授权这一步是建立在取号的基础上的，上面我们知道了，成功取号的前提是使用蜂窝数据流量访问，为了能够提升取号成功率，sdk层面会对号码进行缓存，这里还会涉及的一个问题是双卡，所以在Android Sdk接入中也指明了，需要 READ_PHONE_STATE权限来判断用户双卡和换卡的场景。&lt;br /&gt;
+授权后，客户端可以拿到一个token，将token上报给应用服务端。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;2服务端&quot;&gt;2、服务端&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;获取手机号&lt;br /&gt;
+接收到客户端上报的token后，服务端从运营商认证服务端处获取对应的手机号码，整个流程结束。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;三优势&quot;&gt;三、优势&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;降低应用注册/登录门槛，减轻用户记忆负担，提高用户体验；&lt;/li&gt;
+  &lt;li&gt;降低对用户身份、通信行为等属性验证的繁琐步骤，助力企业完善风险管控系统&lt;/li&gt;
+  &lt;li&gt;取号成功率高达99.9%。&lt;/li&gt;
+  &lt;li&gt;两步完成注册登录，耗时仅需1.5秒。&lt;/li&gt;
+  &lt;li&gt;节省企业短验成本&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;登录方式&lt;/th&gt;
+      &lt;th&gt;登录步骤&lt;/th&gt;
+      &lt;th&gt;耗时&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;账号+密码&lt;/td&gt;
+      &lt;td&gt;注册和登录分离，登录时需输入账号和规则不尽相同的密码，非常繁琐&lt;/td&gt;
+      &lt;td&gt;24s以上&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;手机号码+短验&lt;/td&gt;
+      &lt;td&gt;输入手机号码—等待下行短验—切换到短信应用界面记忆验证码—切回应用界面输入短信验证码—点击登录&lt;/td&gt;
+      &lt;td&gt;16s以上&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;一键登录&lt;/td&gt;
+      &lt;td&gt;用户一键授权后，调用运营商网关进行号码认证和登录&lt;/td&gt;
+      &lt;td&gt;1.5秒&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;四小结&quot;&gt;四、小结&lt;/h3&gt;
+&lt;p&gt;一键登录确实从用户交互和体检上提升了很多，目前有很多三方平台整合了三大运营商的sdk，不用单独对接每一家，针对有手机号登录场景的app，不妨考虑下一键登录噢。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
         <title>5周年：岁月使然而我在等你</title>
         <link>https://gorpeln.cn/article/15981552003</link>
         <guid isPermaLink="true">https://gorpeln.cn/article/15981552003</guid>
@@ -4652,1434 +4909,6 @@ int main(int argc, char * argv[]) {
 
 &lt;p&gt;一个类的&lt;code class=&quot;highlighter-rouge&quot;&gt;类对象&lt;/code&gt;只有唯一的一个,Class Classobjc1 = [objc1 class];&lt;/p&gt;
 
-</description>
-      </item>
-    
-      <item>
-        <title>杂记二</title>
-        <link>https://gorpeln.cn/article/2</link>
-        <guid isPermaLink="true">https://gorpeln.cn/article/2</guid>
-        <pubDate>Sun, 02 Feb 2020 00:00:00 +0800</pubDate>
-        <description>&lt;p&gt;1.为什么说Objective-C是一门动态的语言？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;数据类型的确定由编译时推迟到运行时！objective-C 可以通过Runtime 这个运行时机制，在运行时动态的添加和修改变量、方法、类等，所以说Objective-C 是一门动态的语言。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2.#import 跟 #include 有什么区别，@class呢，#import&amp;lt;&amp;gt; 跟 #import”” 有什么区别？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.#import 是Objective-C导入头文件的关键字，#include 是C/C++导入头文件的关键字，使用 #import 头文件会自动只导入一次，不会重复导入。
-2.@class 是告诉编译器声明某个类，当执行时，才去查看类的实现文件，可以解决头文件的相互包含。
-3.#import&amp;lt;&amp;gt; 用来包含系统的头文件，#import&quot;&quot; 用来包含用户头文件。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3.frame 和 bounds 有什么不同？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;frame 指的是：该view在父view坐标系统中的位置(X,Y)和大小(W,H)。(参照点是父view的坐标系统)
-bounds 指的是：该view在本身坐标系统中的位置(X,Y)和(W,H)大小。(参照点是本身坐标系统,所以X Y 永远都是 0 )
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;4.@property (属性) 的本质是什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@property = ivar（实例变量）+ getter + setter（存取方法）;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;5.@property (属性) 中有哪些属性关键字？各个作用是什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;属性可以拥有的特质属性分为四类:
-1.原子性: nonatomic 和 atomic
-2.读/写权限: readwrite(读写) 和 readonly (只读)
-3.内存管理语义: assign、weak、strong 和 copy
-4.方法名:getter=&amp;lt;name&amp;gt; 和 setter=&amp;lt;name&amp;gt;
-5.不常用的：nonnull,null_resettable,nullable
-  
-各个属性关键字的作用:
-1.nonatomic: 非原子操作,编译器生成的setter和getter方法都不会加锁,禁止多线程，提高性能。  
-atomic: 原子操作,自动加锁(创建lock),锁定变量,确保多线程安全。虽然系统默认是atomic, 但是实际开发中一般使用nonatomic，效率高。
-2.readwrite: 可读可写,会生成 getter方法 和 setter方法。默认关键字  readonly: 只读,只会生成getter方法，不会生成setter方法，不希望属性在类外改变。
-3.assign: 是赋值特性,用于基本数据类型，如果用来修饰对象属性 , 那么当对象被销毁后指针是不会指向 nil 的 . 所以会出现野指针错误 ( 与weak的区别 )默认关键字     
-weak：弱引用, 表明该属性定义了一种非拥有关系，在属性所指的对象销毁时，属性值自动清空（nil）。  
-strong: 强引用，setter方法将传入参数先保留，再赋值，传入retaincount会+1。  
-copy: 表示拷贝特性,setter方法将传入对象复制一份，生成不可变对象。
-setter=&amp;lt;name&amp;gt;和getter=&amp;lt;name&amp;gt;一般用在特殊的情境下,当需要定义一个 init 开头的属性，但默认生成的 setter 与 getter 方法也会以 init 开头，而编译器会把所有以 init 开头的方法当成初始化方法，而初始化方法只能返回 self 类型，因此编译器会报错。
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;6.weak 和 assign 有什么不同？什么情况下使用 weak 关键字？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;不同点：
-assign 可以用非 OC 对象(基本数据类型)，而 weak 必须用于 OC 对象。
-weak 表明该属性定义了一种“非拥有关系”。在属性所指的对象销毁时，属性值会自动清空(nil)。
-
-使用 weak 关键字的情况
-1.用 delegate(代理属性) 进行一对一操作的时候。
-2.自身已经对它进行一次强引用,没有必要再强引用一次,也使用 weak 。
-
-所以XIB的IBOutlet连出来的视图属性被设置成weak,因为父控件的subViews数组已经对它有一个强引用。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;7.Objective-C 的类可以多重继承么？可以实现多个接口么？Category是什么？重写一个类的方式用继承好还是分类好？为什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Objective-C 的类不可以多重继承；可以实现多个接口（ @protocol 协议）！Category 是类别；一般情况用分类好，用Category去重写类的方法，仅对本Category有效，不会影响到其他类与原有类的关系。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;8.什么情况下使用 copy 关键字？如果改用strong关键字，可能造成什么问题？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;copy 使用情景：
- 1.NSString、NSArray、NSDictionary 等经常使用 copy 关键字修饰。
- 2.block 也经常使用 copy 关键字。
-
-使用 strong 的话,那么这个属性就有可能指向一个可变对象,如果这个可变对象在外部被修改了,那么会影响该属性。因为他们有对应的可变类型：NSMutableString、NSMutableArray、NSMutableDictionary，他们之间可能进行赋值操作（就是把可变的赋值给不可变的）。为确保对象中的字符串值不会无意间变动，应该在设置新属性值时拷贝一份(所以使用copy)。
-
-一句话：使用copy的目的是，防止把可变类型的对象赋值给不可变类型的对象时，可变类型对象的值发送变化会无意间篡改不可变类型对象原来的值。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;9.浅拷贝(浅复制) 和 深拷贝(深复制) 的区别？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;浅拷贝：只复制指向对象的指针，而不复制引用对象本身。
-深拷贝：复制引用对象本身。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;10.使用系统对象的 copy 与 mutableCopy 方法&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;数据的可变对象和不可变对象
-
-不管是集合类对象（NSArray、NSDictionary、NSSet ...之类的对象），还是非集合类对象（NSString, NSNumber ...之类的对象），接收到 copy 和 mutableCopy 消息时，都遵循以下准则：
-1.copy 返回的是不可变对象（immutableObject）；如果用 copy 返回值调用可变对象(mutable)的方法就会 crash(奔溃) 。
-2.mutableCopy 返回的是可变对象（mutableObject）。
-
-
-数据的浅复制和深复制
-
-在非集合类对象中，对不可变对象进行copy操作，是指针复制，mutableCopy操作是内容复制；对可变对象进行copy和mutableCopy都是内容复制。
-
-在集合类对象中，对不可变对象进行copy操作，是指针复制，mutableCopy操作是内容复制；对可变对象进行copy 和 mutableCopy 都是内容复制。但是：集合对象的内容复制仅限于对象本身，对集合内的对象元素仍然是指针复制。(即单层内容复制)
-
-总结一句话: 只有对不可变对象进行 copy 操作是指针复制（浅复制），其它情况都是内容复制（深复制）！
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;11.这个写法会出什么问题：@property (nonatomic, copy) NSMutableArray *arr;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;出现的问题：添加,删除,修改数组内的元素的时候,程序会因为找不到对应的方法而崩溃。
-//如：-[__NSArrayI removeObjectAtIndex:]: unrecognized selector sent to instance 0x7fcd1bc30460
-
-原因：copy 后返回的是不可变对象（即 arr 是 NSArray 类型，NSArray 类型对象不能调用 NSMutableArray 类型对象的方法），不能对 NSArray 对象进行 添加/修改/删除 等。
-
-当修饰可变类型的属性时，如NSMutableArray、NSMutableDictionary、NSMutableString，用strong。  
-当修饰不可变类型的属性时，如NSArray、NSDictionary、NSString，用copy。
-  
-一般声明NSString和NSArray类型的属性时候，都不希望它会被修改，最好用copy修饰，如果用strong修饰的话，一旦它指向一个可变类型的对象的时候，那么它指向的内容是可以随意被修改的
-如果是NSMutableArray类型的属性，最好用strong修饰，用copy修饰的话，返回的数组是不可变的，一旦对其进行增删改操作就会崩溃
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;12.如何让自己的类用 copy 修饰符？如何重写带 copy 关键字的 setter？&lt;br /&gt;
-1）、让自己的类可以使用copy修饰符的步骤：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a)、让自己的类遵循NSCopying协议
-b)、实现NSCopying协议中必须实现的代理方法：
-    - (id)copyWithZone:(NSZone *)zone;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;示例代码：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#import &amp;lt;Foundation/Foundation.h&amp;gt;
-
-@interface Person : NSObject &amp;lt;NSCopying, NSMutableCopying&amp;gt;
-
-@property (nonatomic, copy) NSString *name;
-
-@end
-
-
-#import &quot;Person.h&quot;
-
-@implementation Person
-
-- (id)copyWithZone:(NSZone *)zone {
-    Person *person = [Person allocWithZone:zone];
-    person.name = self.name;
-    return person;
-}
-
-- (id)mutableCopyWithZone:(NSZone *)zone {
-    Person *person = [Person allocWithZone:zone];
-    person.name = self.name;
-    return person;
-}
-
-@end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;2）、如何重写带copy关键字的setter:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)setName:(NSString *)name {
-    _name = [name copy];
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;13.@synthesize 和 @dynamic 分别有什么作用？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@synthesize : 编译器自动生成属性的 setter方法 和 getter方法 。
-@dynamic : 属性的 setter 与 getter方法 由用户自己实现，不自动生成。
-
-系统默认的就是 @synthesize
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;14.常见的 Objective-C 的数据类型有那些，和C的基本数据类型有什么区别？如：NSInteger和int&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Objective-C 的数据类型有 NSString，NSNumber，NSArray，NSMutableArray，NSData 等等，这些都是class，创建后便是对象。而C语言的基本数据类型只是一定字节的内存空间，用于存放数值;NSInteger是基本数据类型，并不是NSNumber的子类，当然也不是NSObject的子类。NSInteger是基本数据类型Int或者Long的别名，它的区别在于，NSInteger会根据系统是32位还是64位来决定是本身是int还是long。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;15.id 声明的对象有什么特性？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;id 是指向任意类型的 Objcetive-C 的对象,声明的对象具有运行时的特性。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;16.Objective-C 如何对内存管理的，说说你的看法和解决方法？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Objective-C的内存管理主要有三种方式 ARC(自动内存计数)、手动内存计数、内存池。
-1.自动内存计数ARC：由Xcode自动在App编译阶段，在代码中添加内存管理代码。
-2.手动内存计数MRC：遵循内存谁申请、谁释放；谁添加，谁释放的原则。
-3.内存释放池Release Pool：把需要释放的内存统一放在一个池子中，当池子被抽干后(drain)，池子中所有的内存空间也被自动释放掉。内存池的释放操作分为自动和手动。自动释放受runloop机制影响。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ARC下，系统会帮助我们释放该对象所包含的实例变量，但是有些对象还是需要们自己去释放的（比如Core Foundation框架下的一些对象），另外通知中观察者的移除，代理置空，停止timer等
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;17.Category（类别）、 Extension（扩展）和继承的区别&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;区别：
-1.分类(Category)有名字。类扩展(Extension)没有名字，类扩展是一种特殊的分类。
-2.分类只能扩展方法（属性仅仅是声明，并没真正实现）。类扩展可以扩展属性、成员变量和方法。
-3.继承可以增加，修改或者删除方法，并且可以增加属性。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;18.为什么常见的delegate属性都用是 week 而不是 strong ？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;是为了防止 delegate 两端产生不必要的循环引用。
-
-@property (nonatomic, weak) id&amp;lt;UITableViewDelegate&amp;gt; delegate;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;19.delegate 和 Notification 的区别？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;delegate: 一对一反向传值和通知，但是需要遵守协议(@protocol)。
-Notification: 一对多的反向传值和通知，需要提前注册通知，只负责消息发送出去，并不关心谁是接收者。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;20.方法和选择器有何不同？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;selector 只是一个方法的名字。方法却是一个组合体，包含了名字和实现。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;21.你是否接触过OC中的反射机制？简单聊一下概念和使用&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.class反射
-    通过类名的字符串形式实例化对象。
-        Class class = NSClassFromString(@&quot;student&quot;); 
-        Student *stu = [[class alloc] init];
-    将类名变为字符串。
-        Class class =[Student class];
-        NSString *className = NSStringFromClass(class);  
-        
-2.SEL的反射
-    通过方法的字符串形式实例化方法。
-        SEL selector = NSSelectorFromString(@&quot;setName&quot;);  
-        [stu performSelector:selector withObject:@&quot;Mike&quot;];
-    将方法变成字符串。
-        NSStringFromSelector(@selector*(setName:));
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;22.什么是block？用来做什么？使用的时候应该注意什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;block: 闭包（代码块），获取其它函数局部变量的匿名函数。
-作用: 用来反向传值的。
-
-使用注意点: 
-1.在block内部使用外部指针且会造成循环引用情况下，需要用__week修饰外部指针：
-    __weak typeof(self) weakSelf = self; 
-2.在block内部如果调用了延时函数还使用弱指针会取不到该指针，因为已经被销毁了，需要在block内部再将弱指针重新强引用一下。
-    __strong typeof(self) strongSelf = weakSelf;
-3.如果需要在block内部改变外部栈区变量的话，需要在用 __block 修饰外部变量。
-没有通过__block修饰则是将值传进去，而通过__block修饰之后是将变量的内存地址传进去，这样就可以修改变量的值。
-  
-  block是把变量的内存传进去了，修改的只是传进去的那一部分的值，原来的值没有改变，而是用__block修饰之后，是将变量的内存地址传过去了，这样就可以修改变量的值了
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;23.BAD_ACCESS在什么情况下出现？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;访问了野指针，比如访问已经释放对象的成员变量或者发消息、死循环等。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;24.如何访问并修改一个类的私有属性？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.通过KVC获取和修改。
-2.通过runtime访问并修改私有属性。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;参照：&lt;a href=&quot;/article/15515973239&quot;&gt;如何访问并修改一个类的私有属性？&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;25.一个objc对象的isa的指针指向什么？有什么作用？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;指向他的类对象，可以找到对象上的方法。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;26.什么是懒加载？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;懒加载就是只在用到的时候才去初始化。也可以理解成延时加载。
-最简单的一个例子就是tableView中图片的加载显示了, 一个延时加载, 避免内存过高,一个异步加载,避免线程堵塞提高用户体验。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;27.APP启动的顺序&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.先执行main()函数
-2.mian()函数中执行UIApplicationMain()函数 
-3.加载info.plist文件 
-4.创建RunLoop()回调函数
-5.创建UIApplication对象，设置其代理UIApplicationDelegate 
-6.程序加载完毕后调用delegate对象的application:didFinishLaunchingWithOptions:方法
-7.在上诉6.方法中创建UIWindow(窗口)和设置rootViewController(根视图控制器)
-8.最终设置显示窗口(makeKeyAndVisible)
-9.最后程序变成活跃状态(BecomeActive),Runloop 时刻监听各种事件的发生
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;29.ViewController生命周期&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;按照执行顺序排列：
-1.initWithCoder：通过nib文件初始化时触发。
-2.awakeFromNib：nib文件被加载的时候，会发生一个awakeFromNib的消息到nib文件中的每对象。      
-3.loadView：开始加载视图控制器自带的view。
-4.viewDidLoad：视图控制器的view被加载完成。  
-5.viewWillAppear：视图控制器的view将要显示在window上。
-6.updateViewConstraints：视图控制器的view开始更新AutoLayout约束。
-7.viewWillLayoutSubviews：视图控制器的view将要更新内容视图的位置。
-8.viewDidLayoutSubviews：视图控制器的view已经更新视图的位置。
-9.viewDidAppear：视图控制器的view已经展示到window上。 
-10.viewWillDisappear：视图控制器的view将要从window上消失。
-11.viewDidDisappear：视图控制器的view已经从window上消失。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;30.如何对App进行性能测试&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Profile-&amp;gt; Instruments -&amp;gt;Time Profiler
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;31.如何优化App的性能&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.用ARC管理内存 (避免忘记释放内存所造成内存泄露)
-2.正确的使用重用标识符 reuseIdentifier (给TableViewCell CollectionViewCell HeaderFooterView等添加重用标志)
-3.避免庞大的XIB
-4.不要阻塞主线程(耗时操作放在异步中执行,再回到主线程)
-5.重用和延迟加载(懒加载)View
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;32.如何优化UITableView&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.注册重用标识符(reuseIdentifier),给UITableViewCell 和 HeaderFooterView 
-2.缓存行高
-3.尽量少在cellForRowAtIndexPath中设置数据，可以在willDisplayCell里进行数据的设置
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-//不要去设置cell的数据
-}
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-//当cell要显示时才去设置需要显示的cell对应的数据
-}
-4.避免主线程阻塞(获取数据、数据处理等耗时操作，放在子线程异步处理)
-5.避免在Cell中频繁的创建对象
-6.减少对象的属性赋值操作(UIView的frame/bounds等属性的赋值操作,会产生比较大的CPU消耗)
-7.异步绘制
-8.简化视图结构,减少Subviews的数量(减少Cell中控件的数量)
-9.减少离屏渲染
-10.尽量使用rowHeight,sectionFooterHeight 和 sectionHeaderHeight来设定固定的高，不要请求delegate
-11.尽量设置Cell中的view的颜色为完全不透明
-12.尽量少设置颜色渐变，图片的缩放
-13.如果cell内现实的内容来自web，使用异步加载，缓存请求结果
-14.使用正确的数据结构来存储数据
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;33.内存泄漏和内存溢出。 如何检查内存泄漏？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;内存泄漏: 申请的内存空间使用完毕之后未回收。
-一次内存泄露危害可以忽略，但若一直泄漏，无论有多少内存，迟早都会被占用光，最终导致程序crash。（因此，开发中我们要尽量避免内存泄漏）
-
-内存溢出: 程序在申请内存时，没有足够的内存空间供其使用(就是内存不够用了),导致机器重启或者程序crash。
-
-检查内存泄露方法：
-1.静态分析 analyze。
-2.instruments 工具里面有个 leak 可以动态分析。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;34.导致内存泄漏的原因&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ARC环境下导致内存泄漏的根本原因是: 存在循环引用。导致一些内存无法释放，最终dealloc()方法无法被调用。
-情况如下:
-1.VC(控制器)中存在NSTimer(定时器) , 没有及时设置其为失效([timer invalidate])和置空(self.timer=nil)
-2.VC(控制器)中的delegate使用了Strong修饰,没有使用Weak修饰
-3.VC(控制器)中的Block被当前VC(self)持有,又在block内部调用VC中的属性或者方法。解决方法: 在block外部弱化VC(self)。
-
-__weak typeof(self) weakSelf = self;   // block外部弱化
-[self.operationQueue addOperationWithBlock:^{
-    __strong typeof(weakSelf) strongSelf = weakSelf;  // 子线程中再次强引用获取self
-}];
-
-4.大次数循环,内存暴涨
-for (int i = 0; i &amp;lt; 1000000; i++) {
-    NSString *string = @&quot;Abc&quot;;
-    string = [string lowercaseString];
-    string = [string stringByAppendingString:@&quot;xyz&quot;];
-    NSLog(@&quot;%@&quot;, string);
-}
-解决方法：在循环中创建自己的autoReleasePool，及时释放占用内存大的临时变量，减少内存占用峰值。
- for (int i = 0; i &amp;lt; 1000000; i++) {
-     @autoreleasepool {
-          NSString *string = @&quot;Abc&quot;;
-          string = [string lowercaseString];
-          tring = [string stringByAppendingString:@&quot;xyz&quot;];
-          NSLog(@&quot;%@&quot;, string);
-      }
-  }
-5.没有移除通知的观察者
-6.多个对象相互强引用
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;35.iOS中常用的数据存储方式有哪些？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.Plist存储。 (是一种XML格式的属性列表文件,不能存储自定义对象,只能存储NSString,NSArray,NSNumber,Bool等类型,通过NSBundle获取)
-
-2.NSUserDefaults(偏好设置存储)。不需要关心文件名，可以快速进行键值对存储，能够直接存储基本数据类型。
-   // 通过key(fieldName)存储
-   NSUserDefaults *defaus=[NSUserDefaults standardUserDefaults];
-   [defaus setObject:value forKey:fieldName];
-   [defaus synchronize];  // 即时写入 
-   
-   // 通过key(fieldName)获取
-   NSUserDefaults *defaus=[NSUserDefaults standardUserDefaults];
-   return [defaus objectForKey:fieldName];
-   
-3.NSKeyedArchiver 归档 (专门用来做自定义对象归档)。 需要遵守NSCoding协议中的两个方法。encodeWithCoder:(归档对象时,要存储哪些对象的哪些属性)  initWithCoder:(解析文件中的数据)
-
-4.SQLite及FMDB(中小型数据库)。写SQL语句建库、建表、建约束...
-在FMDB中，除查询以外的所有操作，都称为&quot;更新&quot;, create、drop、insert、update、delete等,使用executeUpdate:方法执行更新。 
-FMDB有三个主要的类:1.FMDataBase:代表一个单独的DataBase数据库。 2.FMResultSet:执行查询后的结果集。3.FMDataBaseQueue: 用于多线程执行多个查询或者更新，它是线程安全的。
-
-5.CoreData (对象-关系映射,能够将OC对象转化成数据，也能够将数据库中的数据还原成OC对象。是对SQLite3的封装,更加面向对象，效率没有SQLite3高,在此数据操作期间，不需要编写任何SQL语句)。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;36.iOS中的沙盒目录结构是怎样的？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;沙盒结构：
-1.Application：存放程序源文件，上架前经过数字签名，上架后不可修改。
-2.Documents：常用目录，iCloud备份目录，存放数据。（这里不能存缓存文件，否则上架不被通过）
-3.Library：
-      Caches：存放体积大又不需要备份的数据。(常用的缓存路径)
-      Preference：设置目录，iCloud会备份设置信息。
-4.tmp：存放临时文件，不会被备份，而且这个文件下的数据有可能随时被清除的可能。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;37.你一般是怎么用Instruments的？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Instruments里面工具很多，常用：
-1.Time Profiler: 性能分析
-2.Leaks：检查内存，看是否有内存泄露
-3.Allocations：用来检查内存，写算法的那批人也用这个来检查
-4.Zombies：检查是否访问了僵尸对象，但是这个工具只能从上往下检查，不智能。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;38.isKindOfClass isSubclassOfClass 和 isMemberOfClass 的区别&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.isKindOfClass
-
-// 添加测试函数
--(void)addTestFun{
-
-    // 父类
-    TestModel *modelClass=[[TestModel alloc]init];
-    
-    // 子类(继承TestModel类)
-    TestModelSonClass *sonClass=[[TestModelSonClass alloc]init];
-    
-    // 使用 isKindOfClass 判断
-    BOOL isSuperClass=[modelClass isKindOfClass:[TestModel class]];
-    BOOL isSonClass=[sonClass isKinkdOfClass:[TestModel class]];
-    
-    NSLog(@&quot;One: %d  Two: %d&quot;,isSuperClass,isSonClass);
-    
-}
-
-最终运行效果:
-
-TestModel[87850:13575604] One: 1  Two: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2.isSubclassOfClass
-
-// 添加测试函数
--(void)addTestFun{
-    
-    // 父类
-    TestModel *modelClass=[[TestModel alloc]init];
-    
-    // 子类(继承TestModel类)
-    TestModelSonClass *sonClass=[[TestModelSonClass alloc]init];
-    
-    // 使用 isSubclassOfClass 判断
-    BOOL isSuperClass=[[modelClass class] isSubclassOfClass:[TestModel class]];
-    BOOL isSonClass=[[sonClass class] isSubclassOfClass:[TestModel class]];
-    
-    NSLog(@&quot;One: %d  Two: %d&quot;,isSuperClass,isSonClass);
-    
-}
-
-最终运行效果:
-
-TestModel[87850:13575604] One: 1  Two: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;3.isMemberOfClass
-
-// 添加测试函数
--(void)addTestFun{
-    
-    // 父类
-    TestModel *modelClass=[[TestModel alloc]init];
-    
-    // 子类(继承TestModel类)
-    TestModelSonClass *sonClass=[[TestModelSonClass alloc]init];
-    
-    // 使用 isMemberOfClass 判断
-    BOOL isSuperClass=[modelClass isMemberOfClass:[TestModel class]];
-    BOOL isSonClass=[sonClass isMemberOfClass:[TestModel class]];
-    
-    NSLog(@&quot;One: %d  Two: %d&quot;,isSuperClass,isSonClass);
-    
-}
-
-最终运行效果:
-
-TestModel[87850:13575604] One: 1  Two: 0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;4.最后总结
-
-isKindOfClass 和 isSubclassOfClass 的作用是: 用来判断是否是某个类 或其 子类 的实例。  
-isMemberOfClass的作用是: 用来判断是否是某个类的实例(要完全匹配)。   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;39.respondsToSelector 和 conformsToProtocol 的区别&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;respondsToSelector : 用来判断是否有以某个名字命名的方法   
-conformsToProtocol : 用来判断对象是否实现了指定协议类的方法 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-&lt;hr /&gt;
-
-</description>
-      </item>
-    
-      <item>
-        <title>杂记一</title>
-        <link>https://gorpeln.cn/article/1</link>
-        <guid isPermaLink="true">https://gorpeln.cn/article/1</guid>
-        <pubDate>Sun, 02 Feb 2020 00:00:00 +0800</pubDate>
-        <description>&lt;p&gt;1、设计模式是什么？ 你知道哪些设计模式，并简要叙述？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;设计模式是一种编码经验，就是用比较成熟的逻辑去处理某一种类型的事情。
-  
-在iOS开发中经常用到的设计模式主要有以下几种：
-1.MVC模式
-2.MVVM模式
-3.单例模式
-4.代理模式
-5.观察者模式（通知和KVO）
-6.工厂模式
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;一、MVC模式：
-通过数据模型，控制器逻辑，视图展示将应用程序进行逻辑划分。
-MVC是一切设计的基础，所有新的设计模式都是基于MVC进行的改进。
-使系统层次清晰，职责分明，易于维护
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;二、MVVM模式：
-Model View ViewModel 把模型 视图 业务逻辑层进行解耦和编写。
-MVVM是对MVC模式的优化，其本质是给控制器减负，将一些弱业务逻辑放到VM
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;三、单例模式：
-在程序运行期间，确保对于一个给定的类只有一个实例存在，这个实例有一个全局唯一的访问点，用于进行资源共享控制。
-优势：使用简单，易于跨模块。最主要的是因为只是创建一次，所以可以节省内存。
-缺点：不易被扩展，单例类的职责过重，在一定程度上违背了“单一职责原则”
-使用：工具类、公共跳转类、管理类、uiapplication、nsuserdefault
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;四、代理模式
-当一个类的某些功能需要由别的类来实现，但是又不确定具体会是哪个类实现。
-优势：解耦合
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;五、观察者模式（通知和KVO）
-1、通知是由一个中心对象为所有观察者提供变更通知，主要是广义上关注程序事件
-
-2、KVO：KVO则是被观察的对象直接向观察者发送通知，观察某个属性的状态，状态发生变化时通知观察者，主要是绑定于特定对象属性的值
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;六、工厂模式
-应用场景：工厂方式创建类的实例，多与代理模式配合，创建可替换代理类。app主题修改等
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3、#import跟 #include 有什么区别，@class呢，#import&amp;lt;&amp;gt; 跟 #import””有什么区别？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：
-1). #import是Objective-C导入头文件的关键字，#include是C/C++导入头文件的关键字，使用#import，头文件会自动只导入一次，不会重复导入。
-2). @class告诉编译器某个类的声明，当执行时，才去查看类的实现文件，可以解决头文件的相互包含。
-3). #import&amp;lt;&amp;gt;用来包含系统的头文件，#import””用来包含用户头文件。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;4、frame 和 bounds 有什么不同？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;frame指的是：该view在父view坐标系统中的位置和大小。(参照点是父view的坐标系统)
-bounds指的是：该view在本身坐标系统中的位置和大小。(参照点是本身坐标系统)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;5、Objective-C的类可以多继承么？可以实现多个接口么？Category是什么？重写一个类的方式用继承好还是分类好？为什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：Objective-C的类不可以多继承；可以实现多个接口（协议）；Category是类别；一般情况用分类好，用Category去重写类的方法，仅对本Category有效，不会影响到其他类与原有类的关系。
-    
-PS:
-多继承是指一个子类继承多个父类。多继承对父类的个数没有限制，继承方式可以是公共继承、保护继承和私有继承，
-   
-class Worker{};
-class Farmer{};
-class MigrantWorker :public Worker ,public Farmer{}
-  
-多重继承与多继承不同，当B类从A类派生，C类从B类派生，此时称为多重继承.
-   
-class Person{};
-class Soldier : public Person{};
-class Infantryman : public Soldier{};
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;6、@property 的本质是什么？ivar、getter、setter 是如何生成并添加到这个类中的&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@property = ivar + getter + setter;
-“属性” (property)有两大概念：ivar（实例变量）、getter+setter（存取方法）
-
-“属性” (property)主要作用是封装对象中的数据。 Objective-C 对象通常会把其所需要的数据保存为各种实例变量。实例变量一般通过“存取方法”(access method)来访问。其中，“获取方法” (getter)用于读取变量值，而“设置方法” (setter)用于写入变量值。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;7、@property中有哪些属性关键字？/ @property 后面可以有哪些修饰符？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;属性可以拥有的特质分为四类:
-1.原子性--- nonatomic 特质
-2.读/写权限---readwrite(读写)、readonly (只读)
-3.内存管理语义---assign、strong、 weak、unsafe_unretained、copy
-4.方法名---getter=&amp;lt;name&amp;gt; 、setter=&amp;lt;name&amp;gt;
-5.不常用的：nonnull,null_resettable,nullable
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;8、属性关键字 readwrite，readonly，assign，retain，copy，nonatomic 各是什么作用，在那种情况下用？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：
-1). readwrite 是可读可写特性。需要生成getter方法和setter方法。
-2). readonly 是只读特性。只会生成getter方法，不会生成setter方法，不希望属性在类外改变。
-3). assign 是赋值特性。setter方法将传入参数赋值给实例变量;仅设置变量时,assign用于基本数据类型。
-4). retain(MRC)/strong(ARC) 表示持有特性。setter方法将传入参数先保留，再赋值，传入参数的retaincount会+1。
-5). copy 表示拷贝特性。setter方法将传入对象复制一份，需要完全一份新的变量时。
-6). nonatomic 非原子操作。决定编译器生成的setter和getter方法是否是原子操作，atomic表示多线程安全，一般使用nonatomic，效率高。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;9、什么情况使用 weak 关键字，相比 assign 有什么不同？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.在 ARC 中,在有可能出现循环引用的时候,往往要通过让其中一端使用 weak 来解决,比如: delegate 代理属性。
-2.自身已经对它进行一次强引用,没有必要再强引用一次,此时也会使用 weak,自定义 IBOutlet 控件属性一般也使用 weak；当然，也可以使用strong。
-  
-IBOutlet连出来的视图属性为什么可以被设置成weak?
-    因为父控件的subViews数组已经对它有一个强引用。
-  
-不同点：
-assign 可以用非 OC 对象，而 weak 必须用于 OC 对象。
-weak 表明该属性定义了一种“非拥有关系”。在属性所指的对象销毁时，属性值会自动清空(nil)。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;10、怎么用 copy 关键字？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;用途：
-1. NSString、NSArray、NSDictionary 等等经常使用copy关键字，是因为他们有对应的可变类型：NSMutableString、NSMutableArray、NSMutableDictionary；
-2. block 也经常使用 copy 关键字。
-  
-说明：
-block 使用 copy 是从 MRC 遗留下来的“传统”,在 MRC 中,方法内部的 block 是在栈区的,使用 copy 可以把它放到堆区.在 ARC 中写不写都行：对于 block 使用 copy 还是 strong 效果是一样的，但写上 copy 也无伤大雅，还能时刻提醒我们：编译器自动对 block 进行了 copy 操作。如果不写 copy ，该类的调用者有可能会忘记或者根本不知道“编译器会自动对 block 进行了 copy 操作”，他们有可能会在调用之前自行拷贝属性值。这种操作多余而低效。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;11、用@property声明的 NSString / NSArray / NSDictionary 经常使用 copy 关键字，为什么？如果改用strong关键字，可能造成什么问题？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：用 @property 声明 NSString、NSArray、NSDictionary 经常使用 copy 关键字，是因为他们有对应的可变类型：NSMutableString、NSMutableArray、NSMutableDictionary，他们之间可能进行赋值操作（就是把可变的赋值给不可变的），为确保对象中的字符串值不会无意间变动，应该在设置新属性值时拷贝一份。    
-  
-1. 因为父类指针可以指向子类对象,使用 copy 的目的是为了让本对象的属性不受外界影响,使用 copy 无论给我传入是一个可变对象还是不可对象,我本身持有的就是一个不可变的副本。
-2. 如果我们使用是 strong ,那么这个属性就有可能指向一个可变对象,如果这个可变对象在外部被修改了,那么会影响该属性。     
-   
-//总结：使用copy的目的是，防止把可变类型的对象赋值给不可变类型的对象时，可变类型对象的值发生变化会无意间篡改不可变类型对象原来的值。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;12、浅拷贝和深拷贝的区别？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：
-浅拷贝：只复制指向对象的指针，而不复制引用对象本身。
-深拷贝：复制引用对象本身。内存中存在了两份独立对象本身，当修改A时，A_copy不变。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;13、系统对象的 copy 与 mutableCopy 方法&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;不管是集合类对象（NSArray、NSDictionary、NSSet ... 之类的对象），还是非集合类对象（NSString, NSNumber ... 之类的对象），接收到copy和mutableCopy消息时，都遵循以下准则：
-1. copy 返回的是不可变对象（immutableObject）；如果用copy返回值调用mutable对象的方法就会crash。
-2. mutableCopy 返回的是可变对象（mutableObject）。
-   
-一、非集合类对象的copy与mutableCopy
-  在非集合类对象中，对不可变对象进行copy操作，是指针复制，mutableCopy操作是内容复制；
-  对可变对象进行copy和mutableCopy都是内容复制。用代码简单表示如下：
-    NSString *str = @&quot;hello word!&quot;;
-    NSString *strCopy = [str copy] // 指针复制，strCopy与str的地址一样
-    NSMutableString *strMCopy = [str mutableCopy] // 内容复制，strMCopy与str的地址不一样
-   
-    NSMutableString *mutableStr = [NSMutableString stringWithString: @&quot;hello word!&quot;];
-    NSString *strCopy = [mutableStr copy] // 内容复制
-    NSMutableString *strMCopy = [mutableStr mutableCopy] // 内容复制
-  
-二、集合类对象的copy与mutableCopy (同上)
-  在集合类对象中，对不可变对象进行copy操作，是指针复制，mutableCopy操作是内容复制；
-  对可变对象进行copy和mutableCopy都是内容复制。但是：集合对象的内容复制仅限于对象本身，对集合内的对象元素仍然是指针复制。(即单层内容复制)
-    NSArray *arr = @[@[@&quot;a&quot;, @&quot;b&quot;], @[@&quot;c&quot;, @&quot;d&quot;];
-    NSArray *copyArr = [arr copy]; // 指针复制
-    NSMutableArray *mCopyArr = [arr mutableCopy]; //单层内容复制
-     
-    NSMutableArray *array = [NSMutableArray arrayWithObjects:[NSMutableString stringWithString:@&quot;a&quot;],@&quot;b&quot;,@&quot;c&quot;,nil];
-    NSArray *copyArr = [mutableArr copy]; // 单层内容复制
-    NSMutableArray *mCopyArr = [mutableArr mutableCopy]; // 单层内容复制
-      
-【总结一句话】：
-    只有对不可变对象进行copy操作是指针复制（浅复制），其它情况都是内容复制（深复制）！
-    
-  
-1、如果使用strong来修饰NSArray类型的数组，当array的数组被赋值了可变数组对象时，当可变数组改变时，NSArray数组里的对象也会跟着改变。使用copy修饰，在被赋值可变数组时，会生成一个新的不可变数组对象，这样可变数组之后怎样变化，都不会影响NSArray类型的数组对象。   
-  
-2.使用strong来修饰NSMutableArray类型的数组，当数组被赋值了可变数组对象时，当可变数组改变时，NSMutableArray数组里的对象也会跟着改变，这是符合我们预期的。当使用copy修饰后，被赋值后，会生成一个新的不可变数组对象。这样我们还以为它是可变类型的数组，然后使用增删改查，就会crash，也谈不上可以改变数组对象了。   
-  
-3.综上，用property声明NSArray数组时，最好使用copy。用property声明NSMutableArray数组时，最好使用strong。如果使用copy，又self.mArray来赋值，后面增删改查，程序肯定会crash的。使用_.mArray是可以的。   
-   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;https://img.gorpeln.cn/blog_article_note_001.png&quot; alt=&quot;blog_article_note_001&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;14、这个写法会出什么问题：@property (nonatomic, copy) NSMutableArray *arr;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;问题：添加,删除,修改数组内的元素的时候,程序会因为找不到对应的方法而崩溃。
-//如：-[__NSArray removeObjectAtIndex:]: unrecognized selector sent to instance 0x7fcd1bc30460
-// copy后返回的是不可变对象（即 arr 是 NSArray 类型，NSArray 类型对象不能调用 NSMutableArray 类型对象的方法）
-原因：是因为 copy 就是复制一个不可变 NSArray 的对象，不能对 NSArray 对象进行添加/修改。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;15、如何让自己的类用 copy 修饰符？如何重写带 copy 关键字的 setter？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;若想令自己所写的对象具有拷贝功能，则需实现 NSCopying 协议。如果自定义的对象分为可变版本与不可变版本，那么就要同时实现 NSCopying 与 NSMutableCopying 协议。
-具体步骤：
-    1. 需声明该类遵从 NSCopying 协议
-    2. 实现 NSCopying 协议的方法。
-        // 该协议只有一个方法: 
-        - (id)copyWithZone:(NSZone *)zone;
-        // 注意：使用 copy 修饰符，调用的是copy方法，其实真正需要实现的是 “copyWithZone” 方法。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;16、写一个 setter 方法用于完成 @property (nonatomic, retain) NSString *name，写一个 setter 方法用于完成 @property (nonatomic, copy) NSString *name&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：
-// retain
-- (void)setName:(NSString *)str {
-  [str retain];
-  [_name release];
-  _name = str;
-}
-// copy
-- (void)setName:(NSString *)str {
-  id t = [str copy];
-  [_name release];
-  _name = t;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;17、@synthesize 和 @dynamic 分别有什么作用？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@property有两个对应的词，一个是@synthesize，一个是@dynamic。
-如果@synthesize和@dynamic都没有写，那么默认的就是 @synthesize var = _var;
-// 在类的实现代码里通过 @synthesize 语法可以来指定实例变量的名字。(@synthesize var = _newVar;)
-1. @synthesize 的语义是如果你没有手动实现setter方法和getter方法，那么编译器会自动为你加上这两个方法。
-2. @dynamic 告诉编译器，属性的setter与getter方法由用户自己实现，不自动生成（如，@dynamic var）。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;18、常见的 Objective-C 的数据类型有那些，和C的基本数据类型有什么区别？如：NSInteger和int&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：
-Objective-C的数据类型有NSString，NSNumber，NSArray，NSMutableArray，NSData等等，这些都是class，创建后便是对象，而C语言的基本数据类型int，只是一定字节的内存空间，用于存放数值;NSInteger是基本数据类型，并不是NSNumber的子类，当然也不是NSObject的子类。NSInteger是基本数据类型Int或者Long的别名(NSInteger的定义typedef long NSInteger)，它的区别在于，NSInteger会根据系统是32位还是64位来决定是本身是int还是long。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;19、id 声明的对象有什么特性？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：id 声明的对象具有运行时的特性，即可以指向任意类型的Objcetive-C的对象。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;20、Objective-C 如何对内存管理的，说说你的看法和解决方法？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：Objective-C的内存管理主要有三种方式ARC(自动内存计数)、手动内存计数、内存池。
-1). 自动内存计数ARC：由Xcode自动在App编译阶段，在代码中添加内存管理代码。
-2). 手动内存计数MRC：遵循内存谁申请、谁释放；谁添加，谁释放的原则。
-3). 内存释放池Release Pool：把需要释放的内存统一放在一个池子中，当池子被抽干后(drain)，池子中所有的内存空间也被自动释放掉。内存池的释放操作分为自动和手动。自动释放受runloop机制影响。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;22、Category（类别）、 Extension（类扩展）和继承的区别&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;分类：
-1、category可以在不获悉、不改变原来代码的情况下往里面添加新的方法，只能添加，不能删除修改。
-2、类别中的方法优先级高于类中的方法。如果类别和原来类中的方法产生名称冲突，则类别将覆盖原来的方法。
-3、类别不能添加类的属性和实例变量。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;类扩展：形式上看：extension 是匿名的category,为一个类增加私有方法,属性或成员变量,并且只能在本文件中被使用，并且新添加的方法一定要予以实现。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;继承：多个类具有相同的实例变量和方法时，考虑用继承  
-1.继承可以在原来父类的成员变量的基础上，添加新的成员变量 
-2.继承可以增加、修改和删除方法。     
-3.继承可以通过使用super对原来方法进行重载。  
-  
-共同点：都是给一个类进行扩展
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;成员变量和属性的区别: 
-   
-声明一个属性:
-@property (nonatomic, strong) NSString *myString;
-  
-  
-声明一个成员变量(实例变量):
-@interface MyViewController:UIViewController
-{
- NSString *_myString; //实例变量 
- int count;
-}
-@end  
-  
-综上所述可知：成员变量是定义在｛｝号中的变量，如果变量的数据类型是一个类则称这个变量为实例变量。因为实例变量是成员变量的一种特殊情况，所以实例变量也是类内部使用的，无需与外部接触的变量，这个也就是所谓的类私有变量。而属性变量是用于与其他对象交互的变量。
-  
-实例变量+基本数据类型变量=成员变量  
-   
-我们声明了一个属性,因为现在我们用的编译器已经是LLVM了，所以不再需要为属性声明实例变量了。如果LLVM发现一个没有匹配实例变量的属性，它将为你生成以下划线开头的实例变量_myString，不需要自己手动再去写实例变量。而且也不需要在.m文件中写@synthesize myString；也会自动为你生成setter，getter方法。  
-@synthesize的作用就是让编译器为你自动生成setter与getter方法。那么在.m文件中可以直接的使用_myString实例变量，也可以通过属性self.myString.两者都是一样的,只不过后者是通过调用_myString的setter/getter方法。
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;分类运用场景举例：  
-问题1：  
-  
-项目中已经有上百个页面了，如果一个一个的加，浪费时间不说，以后增加了新页面，还需要添加方法。
-  
-解决方法：  
-  
-我们可以发现页面都继承了UIViewController，想要在每个页面都执行的代码，可以写在这些页面的父类中。我们可以把代码写在UIViewController中；出现问题2。  
-    
-问题2： 
-  
-UIViewController是官方类，我们只能调用期接口，并不能修改他的实现。
-  
-解决方法：使用分类（category）。
-  
-问题3：
-  
-本类是系统的类，这里是UIViewController，我们可以使用分类扩展他的方法，也可以重写他的方法，可是我需要在调用的地方加头文件，所有子类都写头文件和直接在子类写方法没有什么区别，怎么样可以使得不写头文件，子类就能调用我们写的代码呢？
-  
-回答：
-  
-我们可以进行方法交换（这样可以不必在调用的地方增加头文件），从而使得在实现的时候调用重写的方法。
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.分类不能添加属性的实质原因：  
-  
-我们知道在一个类中用@property声明属性，编译器会自动帮我们生成_成员变量和setter/getter，但分类的指针结构体中，根本没有属性列表。所以在分类中用@property声明属性，既无法生成_成员变量也无法生成setter/getter。 因此结论是：我们可以用@property声明属性，编译和运行都会通过，只要不使用程序也不会崩溃。但如果调用了_成员变量和setter/getter方法，报错就在所难免了。
-  
-2.报错的根本原因是使用了系统没有生成的setter/getter方法，我们可以手动添加setter/getter来避免崩溃，完成调用，如uiview扩展。  
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;23、我们说的OC是动态运行时语言是什么意思？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：主要是将数据类型的确定由编译时，推迟到了运行时。简单来说，运行时机制使我们直到运行时才去确定一个对象的类别，以及调用该类别对象指定方法。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;24、为什么我们常见的delegate属性都用是week而不是retain/strong？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：是为了防止delegate两端产生不必要的循环引用。
-@property (nonatomic, weak) id&amp;lt;UITableViewDelegate&amp;gt; delegate;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;25、什么时候用delegate，什么时候用Notification？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Delegate(委托模式)：1对1的反向消息通知功能。
-Notification(通知模式)：只想要把消息发送出去，告知某些状态的变化。但是并不关心谁想要知道这个。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;26、什么是 KVO 和 KVC？&lt;a href=&quot;https://gorpeln.cn/article/15326844120&quot;&gt;KVO用法总结&lt;/a&gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). KVC(Key-Value-Coding)：键值编码 是一种通过字符串间接访问对象的方式（即给属性赋值）
-    举例说明：
-    stu.name = @&quot;张三&quot; // 点语法给属性赋值
-    [stu setValue:@&quot;张三&quot; forKey:@&quot;name&quot;]; // 通过字符串使用KVC方式给属性赋值
-    stu1.nameLabel.text = @&quot;张三&quot;;
-    [stu1 setValue:@&quot;张三&quot; forKey:@&quot;nameLabel.text&quot;]; // 跨层赋值
-    
-2). KVO(key-Value-Observing)：键值观察机制 他提供了观察某一属性变化的方法，极大的简化了代码。
-     KVO只能被KVC触发，包括使用setValue:forKey:方法和点语法。
-   // 通过下方方法为属性添加KVO观察
-   // keyPath就是要观察的属性值
-   // options给你观察键值变化的选择
-   // context方便传输你需要的数据
-   - (void)addObserver:(NSObject *)observer
-                     forKeyPath:(NSString *)keyPath
-                     options:(NSKeyValueObservingOptions)options
-                     context:(nullable void *)context;
-     
-   // 当被观察的属性发送变化时，会自动触发下方方法 
-   // change里存储了一些变化的数据，比如变化前的数据，变化后的数据；如果注册时context不为空，这里context就能接收到。        
-   - (void)observeValueForKeyPath:(NSString *)keyPath
-                              ofObject:(id)object
-                                  change:(NSDictionary *)change
-                                 context:(void *)context{}
-      
-KVC 和 KVO 的 keyPath 可以是属性、实例变量、成员变量。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;27、KVC的底层实现？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;当一个对象调用setValue方法时，方法内部会做以下操作：
-1). 检查是否存在相应的key的set方法，如果存在，就调用set方法。
-2). 如果set方法不存在，就会查找与key相同名称并且带下划线的成员变量，如果有，则直接给成员变量属性赋值。
-3). 如果没有找到_key，就会查找相同名称的属性key，如果有就直接赋值。
-4). 如果还没有找到，则调用valueForUndefinedKey:和setValue:forUndefinedKey:方法。
-这些方法的默认实现都是抛出异常，我们可以根据需要重写它们。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;28、KVO的底层实现？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;KVO基于runtime机制实现。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;29、ViewController生命周期&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;按照执行顺序排列：
-1、alloc：创建对象，分配空间  
-2、init (initWithNibName)：初始化对象，初始化数据  
-3、loadView：加载控制器的view。  
-4、viewDidLoad：视图控制器的view加载完成  
-5、viewWillAppear：视图将出现在屏幕之前，马上这个视图就会被展现在屏幕上了  
-6、viewDidAppear：视图已在屏幕上渲染完成  
-7、viewWillDisappear：视图将被从屏幕上移除之前执行  
-8、viewDidDisappear：视图已经被从屏幕上移除，用户看不到这个视图了  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;30、方法和选择器有何不同？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;selector是一个方法的名字，方法是一个组合体，包含了名字和实现。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;31、你是否接触过OC中的反射机制？简单聊一下概念和使用&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). class反射
-    通过类名的字符串形式实例化对象。
-        Class class = NSClassFromString(@&quot;student&quot;); 
-        Student *stu = [[class alloc] init];
-    将类名变为字符串。
-        Class class =[Student class];
-        NSString *className = NSStringFromClass(class);
-2). SEL的反射
-    通过方法的字符串形式实例化方法。
-        SEL selector = NSSelectorFromString(@&quot;setName&quot;);  
-        [stu performSelector:selector withObject:@&quot;Mike&quot;];
-    将方法变成字符串。
-        NSStringFromSelector(@selector*(setName:));
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;32、调用方法有两种方式：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). 直接通过方法名来调用。[person show];
-2). 间接的通过SEL数据来调用 SEL aaa = @selector(show); [person performSelector:aaa];  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;33、如何对iOS设备进行性能测试？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答： Profile-&amp;gt; Instruments -&amp;gt;Time Profiler
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;34、开发项目时你是怎么检查内存泄露？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). 静态分析 analyze。
-2). instruments工具里面有个leak可以动态分析。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;35、什么是懒加载？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：懒加载就是只在用到的时候才去初始化。也可以理解成延时加载。
-我觉得最好也最简单的一个例子就是tableView中图片的加载显示了, 一个延时加载, 避免内存过高,一个异步加载,避免线程堵塞提高用户体验。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;36、类变量的 @public，@protected，@private，@package 声明各有什么含义？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@public 任何地方都能访问;
-@protected 该类和子类中访问,是默认的;
-@private 只能在本类中访问;
-@package 本包内使用,跨包不可以。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;37、什么是谓词？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;谓词就是通过NSPredicate给定的逻辑条件作为约束条件,完成对数据的筛选。
-//定义谓词对象,谓词对象中包含了过滤条件(过滤条件比较多)
-NSPredicate *predicate = [NSPredicate predicateWithFormat:@&quot;age&amp;lt;%d&quot;,30];
-//使用谓词条件过滤数组中的元素,过滤之后返回查询的结果
-NSArray *array = [persons filteredArrayUsingPredicate:predicate];
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;38、isa指针问题&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;isa：是一个Class 类型的指针. 每个实例对象有个isa的指针,他指向对象的类,而Class里也有个isa的指针, 指向meteClass(元类)。元类保存了类方法的列表。当类方法被调 用时,先会从本身查找类方法的实现,如果没有,元类会向他父类查找该方法。同时注意的是:元类(meteClass)也是类,它也是对象。元类也有isa指针,它的isa指针最终指向的是一个根元类(root meteClass)。根元类的isa指针指向本身,这样形成了一个封闭的内循环。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;39、如何访问并修改一个类的私有属性？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). 一种是通过KVC获取。
-2). 通过runtime访问并修改私有属性。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;40、一个objc对象的isa的指针指向什么？有什么作用？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：指向他的类对象,从而可以找到对象上的方法。  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;isa指针是和Class同类型的objc_class结构指针，类对象的指针指向其所属的类，即元类。元类中存储着类对象的类方法，当访问某个类的类方法时会通过该isa指针从元类中寻找方法对应的函数指针。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;41、下面的代码输出什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@implementation Son : Father
-- (id)init {
-   if (self = [super init]) {
-       NSLog(@&quot;%@&quot;, NSStringFromClass([self class])); // Son
-       NSLog(@&quot;%@&quot;, NSStringFromClass([super class])); // Son
-   }
-   return self;
-}
-@end
-// 解析：
-self 是类的隐藏参数，指向当前调用方法的这个类的实例。
-super是一个Magic Keyword，它本质是一个编译器标示符，和self是指向的同一个消息接收者。
-不同的是：super会告诉编译器，调用class这个方法时，要去父类的方法，而不是本类里的。
-上面的例子不管调用[self class]还是[super class]，接受消息的对象都是当前 Son *obj 这个对象。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;42、写一个完整的代理，包括声明、实现&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- *  A向B传递信息 就在A中声明delegate 在B中挂上
- */
-
-
-//  a.h
-/**
- *  下面是声明协议的固定格式，AViewControllerDelegate是协议的名称，因为是代理协议，名称格式为：类名+Delegate
- */
-@protocol AViewControllerDelegate &amp;lt;NSObject&amp;gt;
-- (void)doSomething;
-@end
-
-/**
- *  delegate 是AViewController类的一个属性，weak 关键字是为了避免循环引用，&amp;lt;AViewControllerDelegate&amp;gt;表示遵守AViewControllerDelegate协议
- *  更加直白点：A控制器需要其他控制器或视图接收他完成某件事情的信号去做一些事情，具体的控制器或视图是谁，A控制器不关心，取代号是delegate
- */
-@property (nonatomic, weak) id &amp;lt;AViewControllerDelegate&amp;gt; delegate;
-
-
-//a.m
-
-/**
- *  下面这句是判断一下delegate是否实现了doSomething方法，如果delegate没有实现
- *  直接[self.delegate doSomethingAftercaiZuohaole];
- */
-
-/**
- *  传值
- *  if ([_delegate respondsToSelector:@selector(sendValue:)]) { // 如果协议响应
- *  了sendValue:方法
- *  [_delegate sendValue:_textField.text]; // 通知执行协议方法
- *  }
- */
-
-if ([self.delegate respondsToSelector:@selector(doSomething)]) {
-    [self.delegate doSomething];
-}
-
-// /////////////////////////////////////////////////////////////////////
-
-//b.m
-
-&amp;lt;AViewControllerDelegate&amp;gt;
-
-- (void)methodOfBViewController{
-    
-    AViewController *aViewController = [[AViewController alloc] init];
-    aViewController.delegate = self;//说明A控制器充当代理的角色，负责接收A动作完成的信号。
-}
-//代理方法
-- (void)doSomething{
-    NSLog(@&quot;delegate 回调&quot;);
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;43、isKindOfClass、isMemberOfClass、selector作用分别是什么&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;isKindOfClass：判断是否是某个类型或者子类的实例。
-isMemberOfClass：判断是否是某个类型的实例，必须完全匹配。
-selector：通过方法名，获取在内存中的函数的入口地址。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;44、delegate 和 notification 的区别&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). 二者都用于传递消息，不同之处主要在于一个是一对一的，另一个是一对多的。
-2). notification通过维护一个array，实现一对多消息的转发。
-3). delegate需要两者之间必须建立联系，不然没法调用代理的方法；notification不需要两者之间有联系。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;45、什么是block？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;闭包（block）：闭包就是获取其它函数局部变量的匿名函数。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;46、block反向传值&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;在控制器间传值可以使用代理或者block，使用block相对来说简洁。
-    
-在前一个控制器的touchesBegan:方法内实现如下代码。
-   
-  // OneViewController.m
-  TwoViewController *twoVC = [[TwoViewController alloc] init];
-  twoVC.valueBlcok = ^(NSString *str) {
-    NSLog(@&quot;OneViewController拿到值：%@&quot;, str); 
-  };
-  [self presentViewController:twoVC animated:YES completion:nil];
-   
-  // TwoViewController.h   （在.h文件中声明一个block属性）
-  @property (nonatomic ,strong) void(^valueBlcok)(NSString *str);
-   
-  // TwoViewController.m   （在.m文件中实现方法）
-- (void)touchesBegan:(NSSet&amp;lt;UITouch *&amp;gt; *)touches withEvent:(UIEvent *)event {
-    // 传值:调用block
-    if (_valueBlcok) {
-        _valueBlcok(@&quot;123456&quot;);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;47、block的注意点&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). 在block内部使用外部指针且会造成循环引用情况下，需要用__week修饰外部指针：
-    __weak typeof(self) weakSelf = self; 
-2). 在block内部如果调用了延时函数还使用弱指针会取不到该指针，因为已经被销毁了，需要在block内部再将弱指针重新强引用一下。
-    __strong typeof(self) strongSelf = weakSelf;
-3). 如果需要在block内部改变外部栈区变量的话，需要在用__block修饰外部变量。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;48、BAD_ACCESS在什么情况下出现？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：这种问题在开发时经常遇到。原因是访问了野指针，比如访问已经释放对象的成员变量或者发消息、死循环等。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;49、lldb（gdb）常用的控制台调试命令？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). p 输出基本类型。是打印命令，需要指定类型。是print的简写
-    p (int)[[[self view] subviews] count]
-2). po 打印对象，会调用对象description方法。是print-object的简写
-    po [self view]
-3). expr 可以在调试时动态执行指定表达式，并将结果打印出来。常用于在调试过程中修改变量的值。
-4). bt：打印调用堆栈，是thread backtrace的简写，加all可打印所有thread的堆栈
-5). br l：是breakpoint list的简写
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;50、你一般是怎么用Instruments的？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Instruments里面工具很多，常用：
-1). Time Profiler: 性能分析，帮助我们分析代码(方法)的执行时间，找出导致程序变慢的原因
-2). Zombies：检查是否访问了僵尸对象，但是这个工具只能从上往下检查，不智能。“僵尸”对象是指在被释放了之后再被访问的对象，事实上已经不存在了
-3). Allocations：用来检查内存，写算法的那批人也用这个来检查。
-4). Leaks：检查内存，看是否有内存泄露。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;51、iOS中常用的数据存储方式有哪些？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;数据存储有四种方案：NSUserDefault、KeyChain、file、DB。
-    其中File有三种方式：plist、Archive（归档）
-    DB包括：SQLite、FMDB、CoreData
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;https://img.gorpeln.cn/blog_Interview_save.png&quot; alt=&quot;blog_Interview_save&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;52、iOS的沙盒目录结构是怎样的？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;沙盒结构：
-1). Application：存放程序源文件，上架前经过数字签名，上架后不可修改。
-2). Documents：常用目录，iCloud备份目录，存放数据。（这里不能存缓存文件，否则上架不被通过）
-3). Library：
-        Caches：存放体积大又不需要备份的数据。(常用的缓存路径)
-        Preference：设置目录，iCloud会备份设置信息。
-4). tmp：存放临时文件，不会被备份，而且这个文件下的数据有可能随时被清除的可能。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;53、iOS多线程技术有哪几种方式？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：pthread、NSThread、GCD、NSOperation
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;54、GCD 与 NSOperation 的区别：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GCD 和 NSOperation 都是用于实现多线程：
-    GCD 基于C语言的底层API，GCD主要与block结合使用，代码简洁高效。
-    NSOperation 属于Objective-C类，是基于GCD更高一层的封装。复杂任务一般用NSOperation实现。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;55、写出使用GCD方式从子线程回到主线程的方法代码&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：dispatch_sync(dispatch_get_main_queue(), ^{ });
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;56、如何用GCD同步若干个异步调用？（如根据若干个url异步加载多张图片，然后在都下载完成后合成一张整图）&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 使用Dispatch Group追加block到Global Group Queue,这些block如果全部执行完毕，就会执行Main Dispatch Queue中的结束处理的block。
-// 创建队列组
-dispatch_group_t group = dispatch_group_create();
-// 获取全局并发队列
-dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-dispatch_group_async(group, queue, ^{ /*加载图片1 */ });
-dispatch_group_async(group, queue, ^{ /*加载图片2 */ });
-dispatch_group_async(group, queue, ^{ /*加载图片3 */ }); 
-// 当并发队列组中的任务执行完毕后才会执行这里的代码
-dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        // 合并图片
-});
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;57、dispatch_barrier_async（栅栏函数）的作用是什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;函数定义：dispatch_barrier_async(dispatch_queue_t queue, dispatch_block_t block);
-作用：
-    1.在它前面的任务执行结束后它才执行，它后面的任务要等它执行完成后才会开始执行。
-    2.避免数据竞争
-   
-// 1.创建并发队列
-dispatch_queue_t queue = dispatch_queue_create(&quot;myQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
-// 2.向队列中添加任务
-dispatch_async(queue, ^{  // 1.2是并行的
-    NSLog(@&quot;任务1, %@&quot;,[NSThread currentThread]);
-});
-dispatch_async(queue, ^{
-    NSLog(@&quot;任务2, %@&quot;,[NSThread currentThread]);
-});
-   
-dispatch_barrier_async(queue, ^{
-    NSLog(@&quot;任务 barrier, %@&quot;, [NSThread currentThread]);
-});
-   
-dispatch_async(queue, ^{   // 这两个是同时执行的
-    NSLog(@&quot;任务3, %@&quot;,[NSThread currentThread]);
-});
-dispatch_async(queue, ^{
-    NSLog(@&quot;任务4, %@&quot;,[NSThread currentThread]);
-});
-  
-// 输出结果: 任务1 任务2 ——》 任务 barrier ——》任务3 任务4 
-// 其中的任务1与任务2，任务3与任务4 由于是并行处理先后顺序不定。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;58、以下代码运行结果如何？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)viewDidLoad {
-    [super viewDidLoad];
-    NSLog(@&quot;1&quot;);
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        NSLog(@&quot;2&quot;);
-    });
-    NSLog(@&quot;3&quot;);
-}
-// 只输出：1。（主线程死锁）
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;59、什么是 RunLoop&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;从字面上讲就是运行循环，它内部就是do-while循环，在这个循环内部不断地处理各种任务。
-一个线程对应一个RunLoop，基本作用就是保持程序的持续运行，处理app中的各种事件。通过runloop，有事运行，没事就休息，可以节省cpu资源，提高程序性能。
-   
-主线程的run loop默认是启动的。iOS的应用程序里面，程序启动后会有一个如下的main()函数
-int main(int argc, char * argv[]) {
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;60、什么是 Runtime&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Runtime又叫运行时，是一套底层的C语言API，其为iOS内部的核心之一，我们平时编写的OC代码，底层都是基于它来实现的。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;61、Runtime实现的机制是什么，怎么用，一般用于干嘛？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). 使用时需要导入的头文件 &amp;lt;objc/message.h&amp;gt; &amp;lt;objc/runtime.h&amp;gt;
-2). Runtime 运行时机制，它是一套C语言库。
-3). 实际上我们编写的所有OC代码，最终都是转成了runtime库的东西。
-    比如：
-        类转成了 Runtime 库里面的结构体等数据类型，
-        方法转成了 Runtime 库里面的C语言函数，
-        平时调方法都是转成了 objc_msgSend 函数（所以说OC有个消息发送机制）
-    // OC是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)。
-    // [stu show];  在objc动态编译时，会被转意为：objc_msgSend(stu, @selector(show));    
-4). 因此，可以说 Runtime 是OC的底层实现，是OC的幕后执行者。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;有了Runtime库，能做什么事情呢？
-Runtime库里面包含了跟类、成员变量、方法相关的API。
-比如：
-（1）获取类里面的所有成员变量。
-（2）为类动态添加成员变量。
-（3）动态改变类的方法实现。
-（4）为类动态添加新的方法等。
-因此，有了Runtime，想怎么改就怎么改。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;62、什么是 Method Swizzle（黑魔法），什么情况下会使用？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1). 在没有一个类的实现源码的情况下，想改变其中一个方法的实现，除了继承它重写、和借助类别重名方法暴力抢先之外，还有更加灵活的方法 Method Swizzle。
-2). Method Swizzle 指的是改变一个已存在的选择器对应的实现的过程。OC中方法的调用能够在运行时通过改变，通过改变类的调度表中选择器到最终函数间的映射关系。
-3). 在OC中调用一个方法，其实是向一个对象发送消息，查找消息的唯一依据是selector的名字。利用OC的动态特性，可以实现在运行时偷换selector对应的方法实现。
-4). 每个类都有一个方法列表，存放着selector的名字和方法实现的映射关系。IMP有点类似函数指针，指向具体的方法实现。
-5). 我们可以利用 method_exchangeImplementations 来交换2个方法中的IMP。
-6). 我们可以利用 class_replaceMethod 来修改类。
-7). 我们可以利用 method_setImplementation 来直接设置某个方法的IMP。
-8). 归根结底，都是偷换了selector的IMP。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.jianshu.com/p/54d458e93f29&quot;&gt;https://www.jianshu.com/p/54d458e93f29&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;63、_objc_msgForward 函数是做什么的，直接调用它将会发生什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：_objc_msgForward是 IMP 类型，用于消息转发的：当向一个对象发送一条消息，但它并没有实现的时候，_objc_msgForward会尝试做消息转发。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;64、什么是 TCP / UDP ?&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;TCP：传输控制协议。
-UDP：用户数据协议。
-  
-TCP 是面向连接的，建立连接需要经历三次握手，是可靠的传输层协议。
-UDP 是面向无连接的，数据传输是不可靠的，它只管发，不管收不收得到。
-简单的说，TCP注重数据安全，而UDP数据传输快点，但安全性一般。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;65、通信底层原理（OSI七层模型）&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;OSI采用了分层的结构化技术，共分七层：
-    物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;66、介绍一下XMPP？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;XMPP是一种以XML为基础的开放式实时通信协议。
-简单的说，XMPP就是一种协议，一种规定。就是说，在网络上传东西，XMM就是规定你上传大小的格式。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;67、OC中创建线程的方法是什么？如果在主线程中执行代码，方法是什么？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 创建线程的方法
-- [NSThread detachNewThreadSelector:nil toTarget:nil withObject:nil]
-- [self performSelectorInBackground:nil withObject:nil];
-- [[NSThread alloc] initWithTarget:nil selector:nil object:nil];
-- dispatch_async(dispatch_get_global_queue(0, 0), ^{});
-- [[NSOperationQueue new] addOperation:nil];
-   
-// 主线程中执行代码的方法
-- [self performSelectorOnMainThread:nil withObject:nil waitUntilDone:YES];
-- dispatch_async(dispatch_get_main_queue(), ^{});
-- [[NSOperationQueue mainQueue] addOperation:nil];
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;68、tableView的重用机制？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：UITableView 通过重用单元格来达到节省内存的目的: 通过为每个单元格指定一个重用标识符，即指定了单元格的种类,当屏幕上的单元格滑出屏幕时，系统会把这个单元格添加到重用队列中，等待被重用，当有新单元格从屏幕外滑入屏幕内时，从重用队列中找看有没有可以重用的单元格，如果有，就拿过来用，如果没有就创建一个来使用。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;69、用伪代码写一个线程安全的单例模式&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 跟上面的方法实现有一点不同
-+ (instancetype)sharedManager {
-    static GPSharedManager *sharedManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&amp;amp;onceToken, ^{
-          // 要使用self来调用
-        sharedManager = [[GPSharedManager alloc] init];
-    });
-    return sharedManager;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;70、如何实现视图的变形?&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：通过修改view的 transform 属性即可。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;71、在手势对象基础类UIGestureRecognizer的常用子类手势类型中哪两个手势发生后，响应只会执行一次？&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;答：UITapGestureRecognizer,UISwipeGestureRecognizer是一次性手势,手势发生后,响应只会执行一次。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;72、字符串常用方法：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NSString *str = @&quot;abc*123&quot;;
-NSArray *arr = [str componentsSeparatedByString:@&quot;*&quot;]; //以目标字符串把原字符串分割成两部分，存到数组中。@[@&quot;abc&quot;, @&quot;123&quot;];
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;73、如何高性能的给 UIImageView 加个圆角?&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;不好的解决方案：使用下面的方式会强制Core Animation提前渲染屏幕的离屏绘制, 而离屏绘制就会给性能带来负面影响，会有卡顿的现象出现。
-   
-self.view.layer.cornerRadius = 5.0f;
-self.view.layer.masksToBounds = YES;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;正确的解决方案：使用绘图技术
-   
-- (UIImage *)circleImage {
-    // NO代表透明
-    UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0);
-    // 获得上下文
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    // 添加一个圆
-    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
-    CGContextAddEllipseInRect(ctx, rect);
-    // 裁剪
-    CGContextClip(ctx);
-    // 将图片画上去
-    [self drawInRect:rect];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    // 关闭上下文
-    UIGraphicsEndImageContext();
-    return image;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;还有一种方案：使用了贝塞尔曲线&quot;切割&quot;个这个图片, 给UIImageView 添加了的圆角，其实也是通过绘图技术来实现的。
-  
-UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-imageView.center = CGPointMake(200, 300);
-UIImage *anotherImage = [UIImage imageNamed:@&quot;image&quot;];
-UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, NO, 1.0);
-[[UIBezierPath bezierPathWithRoundedRect:imageView.bounds
-                       cornerRadius:50] addClip];
-[anotherImage drawInRect:imageView.bounds];
-imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-UIGraphicsEndImageContext();
-[self.view addSubview:imageView];
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;74、你是怎么封装一个view的&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1）. 可以通过纯代码或者xib的方式来封装子控件
-2）. 建立一个跟view相关的模型，然后将模型数据传给view，通过模型上的数据给view的子控件赋值
-    
-/**
- *  纯代码初始化控件时一定会走这个方法
- */
-- (instancetype)initWithFrame:(CGRect)frame {
-    if(self = [super initWithFrame:frame]) {
-        [self setupUI];
-    }
-    return self;
-}
-    
-/**
- *  通过xib初始化控件时一定会走这个方法
- */
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    if(self = [super initWithCoder:aDecoder]) {
-        [self setupUI];
-    }
-    return self;
-}
-    
-- (void)setupUI {
-    // 初始化代码
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;75、HTTP协议中 POST 方法和 GET 方法有那些区别?&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1. GET用于向服务器请求数据，POST用于提交数据
-2. GET请求，请求参数拼接形式暴露在地址栏，而POST请求参数则放在请求体里面，因此GET请求不适合用于验证密码等操作
-3. GET请求的URL有长度限制，POST请求不会有长度限制
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;76、请简单的介绍下APNS发送系统消息的机制&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;APNS优势：杜绝了类似安卓那种为了接受通知不停在后台唤醒程序保持长连接的行为，由iOS系统和APNS进行长连接替代。
-APNS的原理：
-    1). 应用在通知中心注册，由iOS系统向APNS请求返回设备令牌(device Token)
-    2). 应用程序接收到设备令牌并发送给自己的后台服务器
-    3). 服务器把要推送的内容和设备发送给APNS
-    4). APNS根据设备令牌找到设备，再由iOS根据APPID把推送内容展示
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;https://img.gorpeln.cn/blog_Interview_APNS.png&quot; alt=&quot;blog_Interview_APNS&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;77、iOS之事件的传递和响应机制&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;响应者链的事件传递过程：  
-  
-首先看initial view （初始view、当前view）能否处理这个事件，如果不能则会将事件传递给其上级视图（inital view的superView）；如果上级视图仍然无法处理则会继续往上传递；一直传递到视图控制器view controller，首先判断视图控制器的根视图view是否能处理此事件；如果不能则接着判断该视图控制器能否处理此事件，如果还是不能则继续向上传 递；（对于第二个图视图控制器本身还在另一个视图控制器中，则继续交给父视图控制器的根视图，如果根视图不能处理则交给父视图控制器处理）；一直到 window，如果window还是不能处理此事件则继续交给application处理，如果最后application还是不能处理此事件则将其丢弃
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;事件处理的整个流程总结：  
-  
-　　1、触摸屏幕产生触摸事件后，触摸事件会被添加到由UIApplication管理的事件队列中（即，首先接收到事件的是UIApplication）。
-　　2、UIApplication会从事件队列中取出最前面的事件，把事件传递给应用程序的主窗口（keyWindow）。
-　　3、主窗口会在视图层次结构中找到一个最合适的视图来处理触摸事件。（至此，第一步已完成)
-　　4、最合适的view会调用自己的touches方法处理事件
-　　5、touches默认做法是把事件顺着响应者链条向上抛。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;如何做到一个事件多个对象处理：   
-     
-因为系统默认做法是把事件上抛给父控件，所以可以通过重写自己的touches方法和父控件的touches方法来达到一个事件多个对象处理的目的。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;78、UIView 􏰸􏰸和 CALayer 􏰘􏷻􏵥 区别&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1）CALayer 无法响应用户事件。UTView 和 CALayer 的最明显区别在于它们的可交互性，即 UIView 可以响应用户事件，而 CALayer 不可以，UTView 是继承自 UIResponder 的，决定了 UTView 类及其子类能够通过响应链（iOS 通过视图层级关系来传递触摸事件）接收并响应用户事件。而 CALayer 直接继承于 NSObject 类，所以它不清楚具体的响应链，也就无法响应用户事件。
-2）分工不同。UIView 类侧重于对显示内容的管理和整体布局，而 CALayer 侧重于显示内容的绘制、显示和动画。
-3）所属框架不同。UTView 类是属于 UIKit.fiamework 框架的，UIKit框架主要就是用来构建用户界面的。CALayer 类是属于 QuartzCore.famework 框架的，而且 CALayer 是作为一个低级的，可以承载绘制内容的底层对象出现在该框架的。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;79、冒泡排序&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    NSMutableArray * arr = [NSMutableArray arrayWithObjects:@16,@1,@2,@9,@7,@12,@5,@3,@8,@13,@10, nil];;
-    for (int i = 0; i  &amp;lt; arr.count; i++) {
-        for (int j = 0; j &amp;lt; arr.count - i - 1; j++) {
-            if ([arr[j] intValue] &amp;gt; [arr[j+1] intValue]) {
-                [arr exchangeObjectAtIndex:j withObjectAtIndex:j+1];
-            }
-        }
-    }
-    
-    for (int i = 0 ; i &amp;lt; arr.count; i++) {
-        for (int j = i+1; j &amp;lt; arr.count; j++) {
-            if ([arr[i] intValue] &amp;gt; [arr[j] intValue]) {
-                [arr exchangeObjectAtIndex:i withObjectAtIndex:j];
-            }
-        }
-    }
-    DLog(@&quot;=====%@&quot;,arr);
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;80、APP启动
-&lt;img src=&quot;https://img.gorpeln.cn/blog_article_note_002.jpeg&quot; alt=&quot;blog_article_note_002&quot; /&gt;
-&lt;img src=&quot;https://img.gorpeln.cn/blog_article_note_003.png&quot; alt=&quot;blog_article_note_003&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;81、UITableView 如何优化&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1、正确使用 reuseIdentifier 来重用 Cells  
-2、提前计算并缓存好高度(布局)，因为 heightForRowAtIndexPath:是调
-用最频繁的方法  
-3、尽量少用 addView 给 Cell 动态添加 View，可以初始化时就添加，然 后通过 hide 来控制是否显示  
-4、大量图片展示，异步加载  
-5、尽量少用或不用透明图层  
-6、减少 subviews 的数量  
-7、复杂界面，异步绘制
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
       </item>
     

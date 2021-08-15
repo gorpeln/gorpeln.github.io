@@ -2029,7 +2029,8 @@ margin: 0.5em;
 	display: table-cell;
 */
     margin: 1em auto;
-
+    vertical-align: middle;
+    display: table-cell;
 }
 
 .post-content .image-center img {

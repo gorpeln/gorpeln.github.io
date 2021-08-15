@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HTML数组的基本操作(增删改查、删除重复元素) | gorpeln的个人博客 - gorpeln</title>
+  <title>本机号码一键登录 | gorpeln的个人博客 - gorpeln</title>
 
-  <meta name="keywords" content="gorpeln,个人博客,gpchen,风未止,iOS,陈冠鹏,时光本,HTML,增删改查,代码段,数组,删除元素,unshift,splice,push" />
-  <meta name="description" content="一、创建数组">
+  <meta name="keywords" content="gorpeln,个人博客,gpchen,风未止,iOS,陈冠鹏,时光本,一键登录,手机号,本机号码,联通,移动,电信" />
+  <meta name="description" content="一、前言在移动app使用手机号码登录的场景中，传统模式的步骤如下：  输入手机号码  接收验证码  输入接收到的验证码  点击登陆">
   <meta name="baidu-site-verification" content="V7C06t3NGW" />
   <meta name="google-site-verification" content="rQsj1bQKemnnFtTHPVeAzNS7TVuqN00fSAkdaQiGQQA" />
   <meta name="shenma-site-verification" content="d30b79795d2a66baca2b74a5a82d841e_1586839651">
@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="/assets/fontawesome-pro/css/all.css">
 
   <link rel="shortcut icon" href="/assets/img/favicon.ico" />
-  <link rel="canonical" href="/article/14985344961">
+  <link rel="canonical" href="/article/15987505965">
   <link rel="alternate" type="application/rss+xml" title="gorpeln的个人博客 - gorpeln" href="/feed.xml" />
 
   
@@ -322,13 +322,13 @@
                     <div class="page-content" id="pjax"><div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">HTML数组的基本操作(增删改查、删除重复元素)</h1>
+    <h1 class="post-title">本机号码一键登录</h1>
     <div class="info">
-	    <p class="post-meta">时间：2017-06-27</p>
+	    <p class="post-meta">时间：2020-08-30</p>
 	    
 	    &nbsp;&nbsp;&nbsp;&nbsp;个人分类：
-		<a class="item-date" style="color:#6666cc;" href="/categories#web前端" target="_blank">
-        	web前端
+		<a class="item-date" style="color:#6666cc;" href="/categories#iOS" target="_blank">
+        	iOS
 		</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;标签：
 		
@@ -336,24 +336,18 @@
 		
 		    
 			
-				<a class="pjaxlink" href="/tags#HTML"  target="_blank">HTML</a>
+				<a class="pjaxlink" href="/tags#一键登录"  target="_blank">一键登录</a>
 	    	
 		
 		    
 			
-				<a class="pjaxlink" href="/tags#增删改查"  target="_blank">增删改查</a>
+				<a class="pjaxlink" href="/tags#手机号"  target="_blank">手机号</a>
 	    	
 		
 		    
 			
-				<a class="pjaxlink" href="/tags#代码段"  target="_blank">代码段</a>
+				<a class="pjaxlink" href="/tags#本机号码"  target="_blank">本机号码</a>
 	    	
-		
-		    
-			
-		
-		    
-			
 		
 		    
 			
@@ -370,114 +364,87 @@
   </header>
 
   <article class="post-content">
-    <p><strong>一、创建数组</strong></p>
+    <h3 id="一前言">一、前言</h3>
+<p>在移动app使用手机号码登录的场景中，传统模式的步骤如下：</p>
+<ul>
+  <li>输入手机号码</li>
+  <li>接收验证码</li>
+  <li>输入接收到的验证码</li>
+  <li>点击登陆</li>
+</ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testArray = new Array();   
-</code></pre></div></div>
+<p>最近看到很多应用都采用了一种新的模式—<code class="highlighter-rouge">本机号码一键登录</code> ，这种模式对于用户来说，只需要确认下手机号码是否正确，点击确认登陆即可，即需要操作传统模式的最后一步，方便快捷，抖音、淘宝等应用均已经接入。<br />
+<img src="https://img.gorpeln.cn/blog_login_001.jpg" alt="blog_login_001" /></p>
 
-<p><strong>二、数组中添加元素</strong></p>
+<p>那么<code class="highlighter-rouge">本机号码一键登录</code>的原理是什么呢？下面我们来聊一聊。</p>
 
-<p>　　<strong>1）在数组的开头添加新元素 - unshift()</strong></p>
+<h3 id="二实现原理">二、实现原理</h3>
 
-<pre><code class="language-HTML">
-var fruits = ["Banana", "Orange", "Apple", "Mango"];  
-fruits.unshift("Lemon","Pineapple");  
+<p>目前三大运营商均有介绍和接入文档，原理和流程基本相同，本文从中国移动提供的sdk接入文档来阐述下原理。</p>
 
-//结果：
-Lemon,Pineapple,Banana,Orange,Apple,Mango  
+<p>登录时序图：</p>
 
-</code></pre>
+<p><img src="https://img.gorpeln.cn/blog_login_mobile_002.jpg" alt="blog_login_mobile_002" /></p>
 
-<p>　　<strong>2）在数组的第2位置添加一个元素 - splice()</strong></p>
+<p>从上图中可以分解出客户端和服务端的职责，客户端需要取号和授权，服务端需要获取手机号。</p>
 
-<pre><code class="language-HTML">
-var fruits = ["Banana", "Orange", "Apple", "Mango"];  
-fruits.splice(2,0,"Lemon","Kiwi");   
+<h4 id="1客户端">1、客户端</h4>
+<ul>
+  <li>
+    <p>取号<br />
+在进行一键登录的时候，需要判断用户是否可以获取到本机号码，只有成功获取到号码后才会进行下一步授权。一键登录服务必须打开蜂窝数据流量并且手机操作系统给予应用蜂窝数据权限才能使用，成功获取的过程是需要消耗一点流量。</p>
+  </li>
+  <li>
+    <p>授权<br />
+非完整号码成功获取后，就可以请求展示授权页，供用户操作。授权这一步是建立在取号的基础上的，上面我们知道了，成功取号的前提是使用蜂窝数据流量访问，为了能够提升取号成功率，sdk层面会对号码进行缓存，这里还会涉及的一个问题是双卡，所以在Android Sdk接入中也指明了，需要 READ_PHONE_STATE权限来判断用户双卡和换卡的场景。<br />
+授权后，客户端可以拿到一个token，将token上报给应用服务端。</p>
+  </li>
+</ul>
 
-//结果：
-Banana,Orange,Lemon,Kiwi,Apple,Mango  
+<h4 id="2服务端">2、服务端</h4>
+<ul>
+  <li>获取手机号<br />
+接收到客户端上报的token后，服务端从运营商认证服务端处获取对应的手机号码，整个流程结束。</li>
+</ul>
 
-//分析：
-//arrayObject.splice(index,howmany,item1,.....,itemX)  
-//index 必需。整数，规定添加/删除项目的位置，使用负数可从数组结尾处规定位置。  
-//howmany 必需。要删除的项目数量。如果设置为 0，则不会删除项目。  
-//item1, ..., itemX可选。向数组添加的新项目。  
-	
-</code></pre>
+<h3 id="三优势">三、优势</h3>
+<ul>
+  <li>降低应用注册/登录门槛，减轻用户记忆负担，提高用户体验；</li>
+  <li>降低对用户身份、通信行为等属性验证的繁琐步骤，助力企业完善风险管控系统</li>
+  <li>取号成功率高达99.9%。</li>
+  <li>两步完成注册登录，耗时仅需1.5秒。</li>
+  <li>节省企业短验成本</li>
+</ul>
 
-<p>　　<strong>3）数组的末尾添加新的元素 - push()</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>登录方式</th>
+      <th>登录步骤</th>
+      <th>耗时</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>账号+密码</td>
+      <td>注册和登录分离，登录时需输入账号和规则不尽相同的密码，非常繁琐</td>
+      <td>24s以上</td>
+    </tr>
+    <tr>
+      <td>手机号码+短验</td>
+      <td>输入手机号码—等待下行短验—切换到短信应用界面记忆验证码—切回应用界面输入短信验证码—点击登录</td>
+      <td>16s以上</td>
+    </tr>
+    <tr>
+      <td>一键登录</td>
+      <td>用户一键授权后，调用运营商网关进行号码认证和登录</td>
+      <td>1.5秒</td>
+    </tr>
+  </tbody>
+</table>
 
-<pre><code class="language-HTML">
-var fruits = ["Banana", "Orange", "Apple", "Mango"];  
-fruits.push("Kiwi")  
-
-//结果：
-Banana,Orange,Apple,Mango,Kiwi  
-
-</code></pre>
-
-<p><strong>三、判断元素是否在数组内</strong></p>
-
-<pre><code class="language-HTML">
-function contains(arr, obj) {    
-    var i = arr.length;    
-    while (i--) {    
-        if (arr[i] === obj) {    
-            return true;    
-        }    
-    }    
-    return false;    
-}  
-
-//使用
-var arr = new Array(1, 2, 3);    
-contains(arr, 2);//返回true    
-contains(arr, 4);//返回false  
-
-</code></pre>
-
-<p><strong>四、删除指定值元素</strong></p>
-
-<pre><code class="language-HTML">
-function removeByValue(arr, val) {  
-  for(var i=0; i&lt;arr.length; i++) {  
-    if(arr[i] == val) {  
-      arr.splice(i, 1);  
-      break;  
-    }  
-  }  
-}
-
-//使用
-var somearray = ["mon", "tue", "wed", "thur"]  
-removeByValue(somearray, "tue");  
-//somearray will now have "mon", "wed", "thur"  
-
-</code></pre>
-
-<p><strong>五、除去数组中的重复元素</strong></p>
-
-<pre><code class="language-HTML">
-function unique(arr) {  
-    var result = [], hash = {};  
-    for (var i = 0, elem; (elem = arr[i]) != null; i++) {  
-        if (!hash[elem]) {  
-            result.push(elem);  
-            hash[elem] = true;  
-        }  
-    }  
-    return result;  
-}
-
-//使用
-var arr = [1,2,2,3,7,8,5,4,4,3,6,2,1];  
-console.log(unique(arr));  
-
-//结果：  
-//1,2,3,7,8,5,4,6 
-
-</code></pre>
-
+<h3 id="四小结">四、小结</h3>
+<p>一键登录确实从用户交互和体检上提升了很多，目前有很多三方平台整合了三大运营商的sdk，不用单独对接每一家，针对有手机号登录场景的app，不妨考虑下一键登录噢。</p>
 
   </article>
 
@@ -485,18 +452,18 @@ console.log(unique(arr));
 
   <div class="copyright">
   	<div>如有任何知识产权、版权问题或理论错误，还请指正。转载请附上原文出处链接。</div>
-	<div>本文链接：<a href="https://gorpeln.cn/article/14985344961">https://gorpeln.cn/article/14985344961</a></div>
+	<div>本文链接：<a href="https://gorpeln.cn/article/15987505965">https://gorpeln.cn/article/15987505965</a></div>
 </div>
 
   <div class="prevandnext">
     	  
 	    <div>
-	    <span>上一篇 ：</span><a href="https://gorpeln.cn/article/15006512926" title="一张图告诉大家，为啥胖了气质会垮？" style="color: #6666cc;font-size: 0.9em;"  target="_blank">一张图告诉大家，为啥胖了气质会垮？</a>
+	    <span>上一篇 ：</span><a href="https://gorpeln.cn/article/16005868715" title="个性化UI在金融场景的探索和应用" style="color: #6666cc;font-size: 0.9em;"  target="_blank">个性化UI在金融场景的探索和应用</a>
 	    </div>
 	  
   	  
 	    <div>
-	    <span>下一篇 ：</span><a href="https://gorpeln.cn/article/14973389134" title="产品经理频繁更改需求为什么会让程序员烦恼？" style="color: #6666cc;font-size: 0.9em;"  target="_blank">产品经理频繁更改需求为什么会让程序员烦恼？</a>
+	    <span>下一篇 ：</span><a href="https://gorpeln.cn/article/15981552003" title="5周年：岁月使然而我在等你" style="color: #6666cc;font-size: 0.9em;"  target="_blank">5周年：岁月使然而我在等你</a>
 	    </div>
 	  
 	 
@@ -569,7 +536,7 @@ console.log(unique(arr));
         </div>
     </div>
     <div class="col-md-3 col-lg-3 hidden-xs hidden-sm aside1">
-        <div class="qrcode" id="qrcodeBtn" onclick="createQrcode('/article/14985344961')"></div>
+        <div class="qrcode" id="qrcodeBtn" onclick="createQrcode('/article/15987505965')"></div>
         <div class="qrcodeImg" id="qrcode"></div>
         <div id="backtotop">
             <a href="#">
