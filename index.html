@@ -157,13 +157,18 @@
     </div>
 </main>
      <div class="footerDes row">
-         ©2015-2023 gorpeln&nbsp; | &nbsp;
+         ©2015-<text id="currentYear"></text> gorpeln&nbsp; | &nbsp;
          <a style="color: #333" href="http://beian.miit.gov.cn/" target="_blank">京ICP备2021024484号-1</a>&nbsp; | &nbsp;
          <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011202003321" style="color: #333">
              <img src="img/gonganbeian.png" style="height: 18px;" class="footerImg">京公网安备11011202003321号</a>
      </div>
 <script src="js/gsap.min.js"></script>
 <script src="js/script.js"></script>
+<script type="text/javascript">
+    const fullYear = new Date().getFullYear();
+    document.getElementById("currentYear").textContent = fullYear;
+
+</script>
 </body>
 
 <style>
